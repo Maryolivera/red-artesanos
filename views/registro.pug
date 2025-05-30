@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h2= title
+  if error
+    p(style="color:red")= error
+  form(action="/registro", method="POST")
+    input(type="text",  name="nombre",    placeholder="Nombre", required)
+    input(type="email", name="email",     placeholder="Email",  required)
+    input(type="password", name="password", placeholder="Contraseña", required)
+    button(type="submit") Registrarse

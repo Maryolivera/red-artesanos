@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h2 Muro de Publicaciones
+  if publicaciones && publicaciones.length
+    ul
+      each pub in publicaciones
+        li= pub
+  else
+    p Aún no hay publicaciones.
