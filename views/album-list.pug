@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h2= title
+  a(href="/albums/new") + Nuevo Álbum
+  if albums.length
+    ul
+      each alb in albums
+        li 
+          a(href=`/albums/${alb.id}`)= alb.titulo
+  else
+    p Aún no tienes álbumes.
