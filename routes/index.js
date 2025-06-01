@@ -2,9 +2,13 @@
 const express = require('express');
 const router  = express.Router();
 const usuario = require('../controllers/usuario');
-console.log(usuario);
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');
+
+//pagina de inicio 
+router.get('/', (req, res) => {
+  res.render('inicio', { title: 'Artesanos.com' });
+})
 
 //rutas de usuario
 router.get('/registro',  usuario.mostrarRegistro);

@@ -1,14 +1,12 @@
-// views/imagen-list.pug
 extends layout
 
 block content
-  h2= title
+  h2 Listado de Imágenes
   if imagenes.length
     ul
       each img in imagenes
         li
-          img(src=`/imagenes/${img.ruta}`, width="150")
-          if img.caption
-            p= img.caption
+          img(src=`/imagenes/${img.ruta}`, width="100")
+          |  #{img.caption || 'Sin descripción'}
   else
-    p Aún no hay imágenes.
+    p No hay imágenes para mostrar.
