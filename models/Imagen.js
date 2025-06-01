@@ -1,12 +1,16 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  return sequelize.define('Album', {
-    titulo: {
+  return sequelize.define('Imagen', {
+    ruta: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    fecha_creacion: {
+    caption: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    fecha_subida: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW

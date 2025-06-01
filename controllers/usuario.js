@@ -1,5 +1,5 @@
 // controllers/usuario.js
-const { Usuario } = require('../models/Usuario');
+const { Usuario } = require('../models');
 
 exports.mostrarRegistro = (req, res) => {
   res.render('registro', { title: 'Registro' });
@@ -40,3 +40,12 @@ exports.mostrarMuro = (req, res) => {
   res.send('Este será tu muro más adelante.');
 };
 
+exports.listarUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.findAll();
+    res.render('usuario-list', { title: 'Listado de Usuarios', usuarios });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al obtener usuarios');
+  }
+};

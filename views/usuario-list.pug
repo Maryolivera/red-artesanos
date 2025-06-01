@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h2= title
+  if usuarios.length
+    ul
+      each u in usuarios
+        li #{u.id}. #{u.nombre} - #{u.email}
+  else
+    p No hay usuarios registrados.

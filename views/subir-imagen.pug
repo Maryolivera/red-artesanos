@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h2= title
+  form(action="/images", method="POST", enctype="multipart/form-data")
+    div
+      label(for="imagen") Selecciona imagen
+      input#imagen(type="file", name="imagen", accept="image/*", required)
+    div
+      label(for="caption") Caption (opcional)
+      input#caption(type="text", name="caption", placeholder="Descripción breve")
+    div
+      label(for="albumId") Álbum
+      input#albumId(type="number", name="albumId", value="1", required)
+    button(type="submit") Subir Imagen

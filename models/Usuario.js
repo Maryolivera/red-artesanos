@@ -1,4 +1,3 @@
-// models/Usuario.js
 // Importa sólo DataTypes de Sequelize
 const { DataTypes } = require('sequelize');
 
@@ -12,7 +11,12 @@ module.exports = (sequelize) => {
     foto_perfil:      { type: DataTypes.STRING,  allowNull: true },
     portafolioPublico:{ type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     fecha_registro:   { type: DataTypes.DATE,    allowNull: false, defaultValue: DataTypes.NOW }
+  
+   // freezeTableName: true, 
+  
   });
+   return Usuario;
+
 };
 
 

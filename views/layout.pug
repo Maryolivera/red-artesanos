@@ -6,10 +6,15 @@ html(lang="es")
     link(rel="stylesheet", href="/css/style.css")
   body
     header
-      nav
-        a(href="/registro") Registro
-        a(href="/login") Login
-        if session && session.usuario
-          a(href="/logout") Logout
+      nav.navbar 
+       a.nav-logo(href="/") Artesanos.com
+        ul.nav-links
+          li: a(href="/") Home
+          li: a(href="/albums") Álbumes
+          li: a(href="/images") Imágenes
+          li: a(href="/usuarios") Usuarios
+          li: a(href="/login") Login
+          li: a(href="/registro") Registro
+
     main
       block content
