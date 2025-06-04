@@ -10,6 +10,15 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
+    },
+     usuarioId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
-  });
+  },
+ {
+    tableName: 'albums',    
+    timestamps: false    
+
+});
 };

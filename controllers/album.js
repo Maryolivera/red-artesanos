@@ -16,7 +16,17 @@ exports.mostrarFormulario = (req, res) => {
 exports.crearAlbum = async (req, res) => {
   const { titulo } = req.body;
 
-  //await Album.create({ titulo, usuarioId: 1 });
-  await Album.create({ titulo });   // creamos sólo con el título
+  if (!titulo || !usuarioId) {
+      return res.render('album-create', {
+        title: 'Crear Nuevo Álbum',
+        error: 'Debe completar todos los campos'
+      });
+    }
+
+  
+  await Album.create({
+     titulo,
+     usuarioId: parseInt(usuarioId, 10)
+     });  
   res.redirect('/albums');
-};
+}

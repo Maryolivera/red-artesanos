@@ -1,5 +1,5 @@
 // models/index.js
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const UsuarioModel = require('./Usuario');
 const AlbumModel   = require('./Album');
 const ImagenModel     = require('./Imagen');
@@ -13,14 +13,25 @@ const sequelize = new Sequelize('red_social','root','',{
 
 // Inicializa cada modelo con la conexion  
 
-const Usuario = UsuarioModel(sequelize);
-const Album   = AlbumModel(sequelize);
-const Imagen  = ImagenModel(sequelize);
+const Usuario = UsuarioModel(sequelize,DataTypes);
+const Album   = AlbumModel(sequelize,DataTypes);
+const Imagen  = ImagenModel(sequelize,DataTypes);
 
-// Relaciones (un Usuario tiene muchos Álbumes)
-Usuario.hasMany(Album, { foreignKey: 'usuarioId' });
-Album.belongsTo(Usuario, { foreignKey: 'usuarioId' });
-Imagen.belongsTo(Album, { foreignKey: 'albumId' });
+// (un Usuario tiene muchos Álbumes)
+Usuario.hasMany(Album, { 
+  foreignKey: 'usuarioId',
+  sourceKey:'id'
+})
+
+ 
+Album.belongsTo(Usuario, { foreignKey: 'usuarioId',targetKey:'id' });
+//  Un Álbum tiene muchas Imágenes
+Album.hasMany(Imagen, { 
+  foreignKey: 'albumId' ,
+  sourceKey:'id'
+});
+Imagen.belongsTo(Album, { foreignKey: 'albumId',targetKey:'id' });
+
 
 
 

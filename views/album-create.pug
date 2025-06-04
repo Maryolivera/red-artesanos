@@ -3,6 +3,7 @@ extends layout
 block content
   h2= title
   form(action="/albums", method="POST")
-    label(for="titulo") Título
-    input#titulo(type="text", name="titulo", placeholder="Nombre del álbum", required)
+    input(type="hidden" name="usuarioId" value="1")   
+    label(for="titulo") Título del álbum:
+    input(type="text" id="titulo" name="titulo" required)
     button(type="submit") Crear Álbum

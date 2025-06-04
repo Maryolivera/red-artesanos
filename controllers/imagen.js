@@ -1,43 +1,68 @@
 const path   = require('path');
 const multer = require('multer');
-const { Imagen } = require('../models');
+const { Imagen,Album } = require('../models');
 
 // Configuración de Multer: destino y nombre
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../public/imagenes'));
+    cb(null, path.join(__dirname, '..' , 'public' , 'uploads'));
   },
   filename: (req, file, cb) => {
-    const unique = Date.now() + '-' + file.originalname;
-    cb(null, unique);
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
   }
 });
-const subirImagen = multer({ storage });
+const upload = multer({ storage });
 
 // Mostrar formulario 
-exports.mostrarFormulario = (req, res) => {
-  res.render('subir-imagen', { title: 'Añadir Imagen' });
+exports.mostrarFormulario = async (req, res) => {
+  try {
+    const albunes = await Album.findAll();
+    return res.render('imagen-upload', {
+      title: 'Subir Imagen',
+      albunes
+    });
+  } catch (e) {
+    console.error(e);
+    return res.send('❌ Error al cargar formulario.');
+  }
 };
 
-// Procesa subida y guarda  en BD
+// Procesar subida (POST "/images")
 exports.procesarUpload = [
-  subirImagen.single('imagen'),
+  upload.single('imagen'),
   async (req, res) => {
-    if (!req.file) return res.send('❌ No seleccionaste un archivo');
+    try {
+      const { albumId, caption } = req.body;
+      const rutaEnServidor = '/uploads/' + req.file.filename;
 
-    // Guarda en BD
-    await Imagen.create({
-      ruta: req.file.filename,
-      caption: req.body.caption || null,
-      albumId: 1     
-    });
+      await Imagen.create({
+        albumId: parseInt(albumId),
+        ruta: rutaEnServidor,
+        caption: caption || null
+      });
 
-    res.redirect('/images');
+      return res.redirect('/images');
+    } catch (err) {
+      console.error(err);
+      return res.send('❌ Error al guardar la imagen.');
+    }
   }
 ];
 
-// Lista todas las imágenes
+// Listar todas las imágenes
 exports.listarImagenes = async (req, res) => {
-  const imagenes = await Imagen.findAll();
-  res.render('imagen-list', { title: 'Galería', imagenes });
+  try {
+    const imagenes = await Imagen.findAll({
+      order: [['fecha_subida', 'DESC']]
+    });
+
+    return res.render('imagen-list', {
+      title: 'Listado de Imágenes',
+      imagenes
+    });
+  } catch (e) {
+    console.error(e);
+    return res.send('❌ Error al listar imágenes.');
+  }
 };

@@ -1,6 +1,7 @@
 // routes/index.js
 const express = require('express');
 const router  = express.Router();
+
 const usuario = require('../controllers/usuario');
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');

@@ -1,12 +1,21 @@
 extends layout
 
 block content
-  h2= title
-  a(href="/albums/new") + Nuevo Álbum
-  if albums.length
-    ul
-      each alb in albums
-        li 
-          a(href=`/albums/${alb.id}`)= alb.titulo
-  else
-    p Aún no tienes álbumes.
+  h1= title
+
+  // Recorro cada álbum
+  each album in albums
+    .album-card
+      h2= album.titulo
+      // Si este álbum tiene imágenes
+      if album.Imagenes.length
+        ul.galeria
+          each img in album.Imagenes
+            li
+              img(src=img.ruta, alt=img.caption, width='100')
+              if img.caption
+                p.caption= img.caption
+      else
+        p Aún no hay imágenes en este álbum.
+
+  

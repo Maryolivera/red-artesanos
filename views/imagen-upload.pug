@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1= title
+
+  form(action="/images", method="POST", enctype="multipart/form-data")
+    div
+      label(for="albumId") Álbum:
+      select(name="albumId", required)
+        option(value="") -- Selecciona un álbum --
+        each alb in albunes
+          option(value=alb.id)= alb.titulo
+
+    div
+      label(for="imagen") Archivo de imagen:
+      input(type="file", name="imagen", accept="image/*", required)
+
+    div
+      label(for="caption") Caption (opcional):
+      input(type="text", name="caption", placeholder="Descripción breve…")
+
+    div
+      button(type="submit") Subir imagen
+
+  hr
+  a(href="/images") ← Volver al listado de imágenes
