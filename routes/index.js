@@ -6,6 +6,8 @@ const usuario = require('../controllers/usuario');
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');
 const upload = require('../middlewares/upload');
+router.get('/albums/:id/galeria', album.mostrarGaleria);
+
 
 router.post('/images', upload.single('foto'), imagen.procesarUpload);
 
