@@ -6,7 +6,7 @@ block content
     ul
       each img in imagenes
         li
-          img(src=`/imagenes/${img.ruta}`, width="100")
+          img(src=`/${img.ruta}`, width="100")
           |  #{img.descripcion || 'Sin descripción'}
   else
     p No hay imágenes para mostrar.

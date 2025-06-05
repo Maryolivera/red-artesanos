@@ -8,12 +8,12 @@ block content
       label(for="albumId") Álbum:
       select(name="albumId", required)
         option(value="") -- Selecciona un álbum --
-        each alb in albunes
+        each alb in albums
           option(value=alb.id)= alb.titulo
 
     div
       label(for="imagen") Archivo de imagen:
-      input(type="file", name="imagen", accept="image/*", required)
+      input(type="file", name="foto", accept="image/*", required)
 
     div
       label(for="caption") Caption (opcional):

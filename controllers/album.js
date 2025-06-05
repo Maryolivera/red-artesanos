@@ -1,9 +1,11 @@
-// controllers/album.js
-const { Album } = require('../models');
+
+const { Album,Imagen } = require('../models');
 
 // Lista todos los álbumes
 exports.listarAlbums = async (req, res) => {
-  const albums = await Album.findAll();
+  const albums = await Album.findAll({
+  include: [{ model: Imagen, as: 'imagenes' }] 
+});
   res.render('album-list', { title: 'Tus Álbumes', albums });
 };
 
@@ -16,17 +18,37 @@ exports.mostrarFormulario = (req, res) => {
 exports.crearAlbum = async (req, res) => {
   const { titulo } = req.body;
 
-  if (!titulo || !usuarioId) {
+  const usuarioId = 1;
+
+  if (!titulo ) {
       return res.render('album-create', {
-        title: 'Crear Nuevo Álbum',
-        error: 'Debe completar todos los campos'
+        title: 'Crear Álbum',
+        error: 'El titulo es obligatorio'
       });
     }
 
   
   await Album.create({
      titulo,
-     usuarioId: parseInt(usuarioId, 10)
+     usuarioId
      });  
   res.redirect('/albums');
 }
+
+//  mostrar galería por álbum 
+exports.mostrarGaleria = async (req, res) => {
+  const id = Number(req.params.id);
+
+  // Traemos el álbum junto con sus imágenes
+  const album = await Album.findByPk(id, {
+    include: [{ model: Imagen, as: 'imagenes', order: [['fecha_subida', 'DESC']] }]
+  });
+
+  if (!album) return res.status(404).send('Álbum no encontrado');
+
+  res.render('galeria', {
+    title: `Galería: ${album.titulo}`,
+    album,                     
+    imagenes: album.imagenes   
+  });
+};

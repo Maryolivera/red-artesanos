@@ -1,26 +1,11 @@
 const path   = require('path');
-const multer = require('multer');
 const { Imagen,Album } = require('../models');
-
-// Configuración de Multer: destino y nombre
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '..' , 'public' , 'uploads'));
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + file.originalname;
-    cb(null, uniqueName);
-  }
-});
-const upload = multer({ storage });
-
 // Mostrar formulario 
 exports.mostrarFormulario = async (req, res) => {
   try {
-    const albunes = await Album.findAll();
-    return res.render('imagen-upload', {
-      title: 'Subir Imagen',
-      albunes
+    const albums = await Album.findAll();
+    res.render('imagen-upload', {
+      title: 'Subir Imagen', albums
     });
   } catch (e) {
     console.error(e);
@@ -28,27 +13,21 @@ exports.mostrarFormulario = async (req, res) => {
   }
 };
 
-// Procesar subida (POST "/images")
-exports.procesarUpload = [
-  upload.single('imagen'),
-  async (req, res) => {
-    try {
-      const { albumId, caption } = req.body;
-      const rutaEnServidor = '/uploads/' + req.file.filename;
-
-      await Imagen.create({
-        albumId: parseInt(albumId),
-        ruta: rutaEnServidor,
-        caption: caption || null
-      });
-
-      return res.redirect('/images');
-    } catch (err) {
-      console.error(err);
-      return res.send('❌ Error al guardar la imagen.');
-    }
+exports.procesarUpload = async (req, res) => {
+  if (!req.file) {
+    return res.send('⚠️ No se recibió ningún archivo');
   }
-];
+
+  const { albumId, caption } = req.body;
+
+  await Imagen.create({
+    albumId: parseInt(albumId, 10),
+    ruta: `uploads/${req.file.filename}`,
+    caption: caption || null
+  });
+
+  res.redirect('/images');
+};
 
 // Listar todas las imágenes
 exports.listarImagenes = async (req, res) => {

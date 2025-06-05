@@ -6,11 +6,12 @@ block content
   // Recorro cada álbum
   each album in albums
     .album-card
-      h2= album.titulo
+      h2
+         a(href=`/albums/${album.id}/galeria`)= album.titulo
       // Si este álbum tiene imágenes
-      if album.Imagenes.length
+      if album.imagenes.length
         ul.galeria
-          each img in album.Imagenes
+          each img in album.imagenes
             li
               img(src=img.ruta, alt=img.caption, width='100')
               if img.caption

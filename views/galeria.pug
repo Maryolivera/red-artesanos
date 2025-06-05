@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+
+  if imagenes.length
+    .grid
+      each img in imagenes
+        figure.thumb
+          img(src='/' + img.ruta, alt=img.caption, width='220')
+          if img.caption
+            figcaption= img.caption
+  else
+    p Aún no hay imágenes en este álbum.
+
+  hr
+  a(href='/albums') ← Volver a Álbumes

@@ -5,6 +5,9 @@ const router  = express.Router();
 const usuario = require('../controllers/usuario');
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');
+const upload = require('../middlewares/upload');
+
+router.post('/images', upload.single('foto'), imagen.procesarUpload);
 
 //pagina de inicio 
 router.get('/', (req, res) => {
@@ -26,7 +29,7 @@ router.get('/usuarios', usuario.listarUsuarios);
 router.get('/albums',      album.listarAlbums);
 router.get('/albums/new',  album.mostrarFormulario);
 router.post('/albums',     album.crearAlbum);
-
+router.get('/albums/:id/galeria', album.mostrarGaleria); 
 
 
 
