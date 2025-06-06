@@ -14,7 +14,8 @@ module.exports = (sequelize) => {
     },
     descripcion: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
+      defaultValue: null
     },
     fecha_subida: {
       type: DataTypes.DATE,

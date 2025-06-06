@@ -1,8 +1,5 @@
 // models/index.js
 const { Sequelize, DataTypes } = require('sequelize');
-const UsuarioModel = require('./Usuario');
-const AlbumModel   = require('./Album');
-const ImagenModel     = require('./Imagen');
 
 // Crea una conexión
 const sequelize = new Sequelize('red_social','root','',{
@@ -10,6 +7,18 @@ const sequelize = new Sequelize('red_social','root','',{
   dialect: 'mariadb',
   logging: false
 });
+
+const UsuarioModel = require('./Usuario');
+const AlbumModel   = require('./Album');
+const ImagenModel     = require('./Imagen');
+const ImagenCompartidaModel = require('./ImagenCompartida');
+
+
+
+const ImagenCompartida = ImagenCompartidaModel(sequelize, DataTypes);
+
+
+
 
 // Inicializa cada modelo con la conexion  
 
@@ -34,6 +43,39 @@ Album.hasMany(Imagen, {
 Imagen.belongsTo(Album, { foreignKey: 'albumId',targetKey:'id',as:'imagenes' });
 
 
+// Una imagen puede compartirse muchas veces:
+Imagen.hasMany(ImagenCompartida, {
+  foreignKey: 'imagenId',
+  as: 'compartidas'
+});
+// Cada “share” pertenece a una imagen:
+ImagenCompartida.belongsTo(Imagen, {
+  foreignKey: 'imagenId',
+  as: 'imagen'
+});
+
+// Un usuario (origen) comparte muchas imágenes:
+Usuario.hasMany(ImagenCompartida, {
+  foreignKey: 'usuarioOrigenId',
+  as: 'enviosCompartidos'
+});
+ImagenCompartida.belongsTo(Usuario, {
+  foreignKey: 'usuarioOrigenId',
+  as: 'origen'
+});
+
+// Un usuario (destino) recibe muchas imágenes compartidas:
+Usuario.hasMany(ImagenCompartida, {
+  foreignKey: 'usuarioDestinoId',
+  as: 'recibidasCompartidas'
+});
+ImagenCompartida.belongsTo(Usuario, {
+  foreignKey: 'usuarioDestinoId',
+  as: 'destino'
+});
+
+
+
 
 
 sequelize.sync()
@@ -41,6 +83,6 @@ sequelize.sync()
   .catch(e => console.error('❌ Error sincronizando tablas:', e));
 
   //exporta conexion y modelos
-module.exports = { sequelize, Usuario,Album ,Imagen};
+module.exports = { sequelize, Usuario,Album ,Imagen,ImagenCompartida};
 
 

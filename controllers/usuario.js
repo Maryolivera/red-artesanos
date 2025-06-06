@@ -1,6 +1,7 @@
 // controllers/usuario.js
 const { Usuario } = require('../models');
 
+
 exports.mostrarRegistro = (req, res) => {
   res.render('registro', { title: 'Registro' });
 };
@@ -9,6 +10,7 @@ exports.procesarRegistro = async (req, res) => {
   const { nombre, email, password } = req.body;
   try {
     await Usuario.create({ nombre, email, password });
+    req.session.usuarioId = usuario.id;
     // confirmamos
     return res.send('✅ Usuario registrado con éxito');
   } catch (err) {

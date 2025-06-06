@@ -18,12 +18,12 @@ exports.procesarUpload = async (req, res) => {
     return res.send('⚠️ No se recibió ningún archivo');
   }
 
-  const { albumId, caption } = req.body;
+  const { albumId, descripcion } = req.body;
 
   await Imagen.create({
     albumId: parseInt(albumId, 10),
     ruta: `uploads/${req.file.filename}`,
-    caption: caption || null
+    caption: descripcion || null
   });
 
   res.redirect('/images');

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1= title
+
+  // Mostrar preview (opcional):
+  if imagen
+    img(src=`/${imagen.ruta}`, width="200")
+    if imagen.descripcion
+      p Descripción: #{imagen.descripcion}
+
+  form(action=`/images/${imagen.id}/compartir` method="POST")
+    div
+      label(for="usuarioDestinoId") Compartir con:
+      select(name="usuarioDestinoId", required)
+        option(value="") -- Selecciona un usuario --
+        each user in usuarios
+          option(value=user.id)= user.nombre
+
+    div
+      button(type="submit") Compartir
+
+  hr
+  a(href='/images') ← Volver al listado de imágenes

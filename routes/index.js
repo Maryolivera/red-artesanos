@@ -6,6 +6,7 @@ const usuario = require('../controllers/usuario');
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');
 const upload = require('../middlewares/upload');
+const compartir = require('../controllers/compartir');
 router.get('/albums/:id/galeria', album.mostrarGaleria);
 
 
@@ -41,7 +42,10 @@ router.get('/images/new', imagen.mostrarFormulario);
 router.post('/images',    imagen.procesarUpload);
 router.get('/images',     imagen.listarImagenes);
 
+// rutas de compartir imagen
+router.get('/images/:id/compartir',  compartir.mostrarFormulario);
 
+router.post('/images/:id/compartir',  compartir.procesarCompartir);
 
 
 
