@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Maryolivera/red-artesanos#readme",
   "dependencies": {
+    "connect-session-sequelize": "^7.1.7",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "mariadb": "^3.4.2",

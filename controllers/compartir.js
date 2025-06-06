@@ -3,7 +3,7 @@ const { ImagenCompartida, Usuario, Imagen } = require('../models');
 
 exports.mostrarFormulario = async (req, res) => {
   try {
-    // 1 Obtiene lista de usuarios para “compartir con…”
+    //  Obtiene lista de usuarios para “compartir con…”
     const usuarios = await Usuario.findAll({
       where: { id: { [Op.ne]: req.session.usuarioId } }, 
       attributes: ['id','nombre']

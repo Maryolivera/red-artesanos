@@ -1,5 +1,28 @@
 const path   = require('path');
 const { Imagen,Album } = require('../models');
+exports.mostrarDetalle = async (req, res) => {
+  try {
+    
+    
+    const imagen = await Imagen.findByPk(req.params.id, {
+      include: [{ model: Album, as: 'album' }]
+    });
+
+    if (!imagen) {
+      return res.status(404).send('❌ Imagen no encontrada.');
+    }
+
+    return res.render('imagen-detalle', {
+      title: `Detalle de Imagen #${imagen.id}`,
+      imagen
+    });
+  } catch (err) {
+    console.error(err);
+    return res.send('❌ Error al mostrar el detalle de la imagen.');
+  }
+};
+
+
 // Mostrar formulario 
 exports.mostrarFormulario = async (req, res) => {
   try {

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1= title
+
+  //– Si la imagen existe, la mostramos
+  if imagen
+    img(src=`/${imagen.ruta}`, width="300")
+    if imagen.descripcion
+      p Descripción: #{imagen.descripcion}
+    else
+      p <em>Sin descripción</em>
+
+    if imagen.album
+      p Álbum: #{imagen.album.titulo}
+
+    //– Botón para compartir (envía a la ruta de compartir)
+    hr
+    a(href=`/images/${imagen.id}/compartir`) Compartir esta imagen → 
+    br
+    a(href="/images") ← Volver al listado de imágenes
+
+  else
+    p La imagen solicitada no existe.

@@ -37,10 +37,10 @@ Album.belongsTo(Usuario, { foreignKey: 'usuarioId',targetKey:'id' });
 //  Un Álbum tiene muchas Imágenes
 Album.hasMany(Imagen, { 
   foreignKey: 'albumId' ,
-  sourceKey:'id',
+
   as:'imagenes'
 });
-Imagen.belongsTo(Album, { foreignKey: 'albumId',targetKey:'id',as:'imagenes' });
+Imagen.belongsTo(Album, { foreignKey: 'albumId',as:'album' });
 
 
 // Una imagen puede compartirse muchas veces:

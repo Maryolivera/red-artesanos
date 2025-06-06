@@ -1,4 +1,4 @@
-// controllers/usuario.js
+
 const { Usuario } = require('../models');
 
 
@@ -10,10 +10,10 @@ exports.procesarRegistro = async (req, res) => {
   const { nombre, email, password } = req.body;
   try {
     await Usuario.create({ nombre, email, password });
-    req.session.usuarioId = usuario.id;
-    // confirmamos
-    return res.send('✅ Usuario registrado con éxito');
+     return res.redirect('/login');
   } catch (err) {
+    
+  
     return res.render('registro', {
       title: 'Registro',
       error: 'El email ya existe o faltan datos'
@@ -27,19 +27,42 @@ exports.mostrarLogin = (req, res) => {
 
 exports.procesarLogin = async (req, res) => {
   const { email, password } = req.body;
-  const user = await Usuario.findOne({ where: { email, password } });
-  if (user) {
-    // respuesta
-    return res.send(`✅ Bienvenido, ${user.nombre}`);
+  try {
+    const user = await Usuario.findOne({ where: { email, password } });
+    if (user) {
+      // Guardamos el usuario en la sesión
+      req.session.usuarioId = user.id;
+      req.session.nombre = user.nombre;
+      return res.redirect('/muro'); 
+    }
+
+     return res.render('login', {
+      title: 'Login',
+      error: 'Credenciales inválidas'
+    });
+  } catch (err) {
+    console.error(err);
+    return res.render('login', {
+      title: 'Login',
+      error: 'Error en el servidor'
+    });
   }
-  return res.render('login', {
-    title: 'Login',
-    error: 'Credenciales inválidas'
+};
+
+exports.procesarLogout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) console.error(err);
+    res.redirect('/login');
   });
 };
 
+
+
 exports.mostrarMuro = (req, res) => {
-  res.send('Este será tu muro más adelante.');
+  if (!req.session.usuarioId) {
+    return res.redirect('/login');
+  }
+  res.send(`Bienvenido al muro, ${req.session.nombre}`);
 };
 
 exports.listarUsuarios = async (req, res) => {
