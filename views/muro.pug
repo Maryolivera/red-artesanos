@@ -1,27 +1,33 @@
+
 extends layout
 
 block content
+  
+ 
+
+
   h1= title
   p Bienvenido/a, #{usuario}!
 
   .menu-acciones
-    a.btn(href='/albums/new') Crear nuevo álbum
-    a.btn(href='/images/new') Subir imagen
-    a.btn(href='/images/compartidas') Imágenes compartidas
-    a.btn(href='/friends') Mis solicitudes/amigos
+    a.btn(href="/albums/new") Crear nuevo álbum
+    a.btn(href="/images/new") Subir imagen
+    a.btn(href="/images/compartidas") Imágenes compartidas
+    a.btn(href="/friends") Mis solicitudes/amigos
 
   hr
 
-  
   if albums.length
     h2 Mis álbumes
     ul
       each alb in albums
         li= alb.titulo
+
   if imagenes.length
     h2 Mis imágenes
     ul
       each img in imagenes
-        li: img(src=img.ruta, width='80')
+        li
+          img(src=img.ruta, width="80")
   else
     p Aún no tienes contenido en tu muro.

@@ -1,5 +1,4 @@
-
-const { Usuario } = require('../models');
+const { Usuario, Album, Imagen } = require('../models');
 
 
 exports.mostrarRegistro = (req, res) => {
@@ -55,17 +54,41 @@ exports.procesarLogout = (req, res) => {
     res.redirect('/login');
   });
 };
+exports.mostrarMuro = async (req, res) => {
+  try {
+    const usuarioId = req.session.usuarioId;
 
+    //  Tus álbumes
+    const albums = await Album.findAll({
+      where: { usuarioId }
+    });
 
+   
+    const imagenes = await Imagen.findAll({
+      include: [{
+        association: 'album',              
+        where: { usuarioId }
+      }],
+      order: [['fecha_subida', 'DESC']]
+    });
 
-exports.mostrarMuro = (req, res) => {
-  res.render('muro', {
-    title: 'Mi Muro',
-    usuario: req.session.usuarioNombre,
-    albums: 
-    imagenes
-  });
+    return res.render('muro', {
+      title: 'Mi Muro',
+      usuario: req.session.usuarioNombre,
+      albums,
+      imagenes
+    });
+  } catch (e) {
+    console.error(e);
+    return res.send('❌ Error al mostrar el muro.');
+  }
 };
+
+
+
+
+
+
 
 exports.listarUsuarios = async (req, res) => {
   try {

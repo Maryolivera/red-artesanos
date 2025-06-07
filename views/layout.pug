@@ -1,4 +1,3 @@
-//-layout.pug
 doctype html
 html(lang="es")
   head
@@ -6,23 +5,9 @@ html(lang="es")
     title= title
     link(rel="stylesheet", href="/css/style.css")
   body
-    //-
-    block nav
-        header
-          nav.navbar 
-          a.nav-logo(href="/") Artesanos.com
-            ul.nav-links
-              li: a(href="/") Inicio 
-              li: a(href="/albums") Álbumes
-              li: a(href="/images") Imágenes
-              li: a(href="/usuarios") Usuarios
-              if !usuario
-                li: a(href='/registro') Registro
-                li: a(href='/login') Login
-              else
-                li: a(href='/muro') Muro
-                li: a(href='/logout') Cerrar sesión
-    //-
+    
+    
+        
     main 
       block content
     footer
