@@ -21,7 +21,9 @@ router.post('/images', upload.single('foto'), imagen.procesarUpload);
 router.get('/images/:id/detalle',   imagen.mostrarDetalle);
 //pagina de inicio 
 router.get('/', (req, res) => {
-  res.render('inicio', { title: 'Artesanos.com' });
+  res.render('inicio', { title: 'Artesanos.com',
+  usuario: req.session.usuarioId ? req.session.usuarioNombre : null
+   });
 })
 
 //rutas de usuario

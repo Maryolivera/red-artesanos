@@ -1,27 +1,17 @@
+//-inicio.pug
 extends layout
+//-
+block nav 
 
 block content
-  .container
-    h1.title Artesanos.com
-    p.subtitle El espacio para que los artesanos compartan sus creaciones .
+  h1 Artesanos.com
+  p El espacio para que los artesanos compartan sus creaciones.
 
-    
-    .buttons
-      a.button(href="/registro") Registrarse
-      a.button(href="/login")   Iniciar Sesión
-
-    hr
-
-    
-    h2.subsection Funcionalidades disponibles
-    ul.features
-      li 
-        a(href="/albums") Álbumes
-      li
-        a(href="/images") Imágenes
-      li 
-        a(href="/usuarios") Usuarios
-
-    hr
-
+  if !usuario
+    div.btn-container
+      a.btn(href='/registro') Registrarse
+    div.btn-container
+      a.btn(href='/login') Iniciar sesión
+  else
+    a.btn(href='/muro') Ir a mi muro
     

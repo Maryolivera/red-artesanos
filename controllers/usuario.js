@@ -59,10 +59,12 @@ exports.procesarLogout = (req, res) => {
 
 
 exports.mostrarMuro = (req, res) => {
-  if (!req.session.usuarioId) {
-    return res.redirect('/login');
-  }
-  res.send(`Bienvenido al muro, ${req.session.nombre}`);
+  res.render('muro', {
+    title: 'Mi Muro',
+    usuario: req.session.usuarioNombre,
+    albums: 
+    imagenes
+  });
 };
 
 exports.listarUsuarios = async (req, res) => {
