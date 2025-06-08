@@ -32,8 +32,8 @@ app.use(
 sequelize.sync(); 
 
 // Tus rutas:
-const routes = require('./routes');
-app.use(routes);
+const routes = require('./routes/index');
+app.use('/',routes);
 
 
 

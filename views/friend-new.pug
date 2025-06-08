@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/friends" method="POST")
+    div
+      label(for="paraId") Selecciona un usuario:
+      select(name="paraId" required)
+        option(value="") -- Selecciona un usuario --
+        each user in usuarios
+          option(value=user.id)= user.nombre
+    button(type="submit") Enviar solicitud
+  a(href="/friends") ← Volver a solicitudes recibidas

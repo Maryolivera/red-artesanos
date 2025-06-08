@@ -1,12 +1,9 @@
-// routes/index.js
 const express = require('express');
 const router  = express.Router();
 
 const usuario = require('../controllers/usuario');
-const isLoggedIn = (req, res, next) => {
-  if (req.session.usuarioId) return next();
-  return res.redirect('/login');
-};
+
+const { isLoggedIn } = require('../middlewares/auth');
 
 
 
@@ -39,6 +36,104 @@ router.get('/logout', usuario.procesarLogout);
 router.get('/muro', isLoggedIn, usuario.mostrarMuro);
 
 router.get('/usuarios', usuario.listarUsuarios);
+
+//rutas de solicitudAmistad
+// Aceptar solicitud
+router.post('/friends/:id/aceptar', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad } = require('../models');
+  await SolicitudAmistad.update(
+    { estado: 'aceptada' },
+    { where: { id: req.params.id } }
+  );
+  res.redirect('/friends');
+});
+
+// Rechazar solicitud
+router.post('/friends/:id/rechazar', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad } = require('../models');
+  await SolicitudAmistad.update(
+    { estado: 'rechazada' },
+    { where: { id: req.params.id } }
+  );
+  res.redirect('/friends');
+});
+
+router.get('/friends/enviadas', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad, Usuario } = require('../models');
+  const usuarioId = req.session.usuarioId;
+
+  const solicitudes = await SolicitudAmistad.findAll({
+    where: { deId: usuarioId, estado: 'pendiente' },
+    include: [{
+      model: Usuario,
+      as: 'destino',      
+      attributes: ['nombre']
+    }]
+  });
+
+  res.render('friends-sent', {
+    title: 'Solicitudes enviadas',
+    solicitudes
+  });
+});
+
+
+
+router.get('/friends/new', isLoggedIn, async (req, res) => {
+  const { Usuario } = require('../models');
+  const usuarioId = req.session.usuarioId;
+
+  const usuarios = await Usuario.findAll({
+    where: { id: { [require('sequelize').Op.ne]: usuarioId } }
+  });
+
+  res.render('friend-new', {
+    title: 'Enviar solicitud de amistad',
+    usuarios
+  });
+});
+
+// Procesar envío de solicitud
+router.post('/friends', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad } = require('../models');
+  const deId = req.session.usuarioId;
+  const { paraId } = req.body;
+
+  // No enviar a uno mismo
+  if (parseInt(deId) === parseInt(paraId)) {
+    return res.redirect('/friends/new');
+  }
+
+  // Evitar duplicados
+  const yaExiste = await SolicitudAmistad.findOne({
+    where: { deId, paraId, estado: 'pendiente' }
+  });
+  if (yaExiste) return res.redirect('/friends');
+
+  await SolicitudAmistad.create({ deId, paraId, estado: 'pendiente' });
+  res.redirect('/friends');
+});
+
+// Mostrar solicitudes recibidas
+router.get('/friends', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad, Usuario } = require('../models');
+  const usuarioId = req.session.usuarioId;
+
+  const solicitudes = await SolicitudAmistad.findAll({
+    where: { paraId: usuarioId, estado: 'pendiente' },
+    include: [{
+      model: Usuario,
+      as: 'origen',      
+      attributes: ['nombre']
+    }]
+  });
+
+  res.render('friends-list', {
+    title: 'Solicitudes de amistad',
+    solicitudes
+  });
+});
+
 
 
 //rutas de albunes

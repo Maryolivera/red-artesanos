@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  if solicitudes.length
+    ul
+      each sol in solicitudes
+        li
+          | Has enviado una solicitud a #{sol.destino.nombre}.
+  else
+    p No has enviado solicitudes pendientes.
+  a(href="/friends") ← Volver a solicitudes recibidas

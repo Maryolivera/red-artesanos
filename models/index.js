@@ -12,10 +12,11 @@ const UsuarioModel = require('./Usuario');
 const AlbumModel   = require('./Album');
 const ImagenModel     = require('./Imagen');
 const ImagenCompartidaModel = require('./ImagenCompartida');
-
+const SolicitudAmistadModel=require('./SolicitudAmistad');
 
 
 const ImagenCompartida = ImagenCompartidaModel(sequelize, DataTypes);
+const SolicitudAmistad = SolicitudAmistadModel(sequelize, DataTypes);
 
 
 
@@ -25,6 +26,8 @@ const ImagenCompartida = ImagenCompartidaModel(sequelize, DataTypes);
 const Usuario = UsuarioModel(sequelize,DataTypes);
 const Album   = AlbumModel(sequelize,DataTypes);
 const Imagen  = ImagenModel(sequelize,DataTypes);
+
+
 
 // (un Usuario tiene muchos Álbumes)
 Usuario.hasMany(Album, { 
@@ -74,7 +77,12 @@ ImagenCompartida.belongsTo(Usuario, {
   as: 'destino'
 });
 
+// Asociaciones:
+Usuario.hasMany(SolicitudAmistad, { foreignKey: 'deId',   as: 'solicitudesEnviadas' });
+SolicitudAmistad.belongsTo(Usuario, { foreignKey: 'deId',   as: 'origen' });
 
+Usuario.hasMany(SolicitudAmistad, { foreignKey: 'paraId', as: 'solicitudesRecibidas' });
+SolicitudAmistad.belongsTo(Usuario, { foreignKey: 'paraId', as: 'destino' });
 
 
 
@@ -83,6 +91,6 @@ sequelize.sync()
   .catch(e => console.error('❌ Error sincronizando tablas:', e));
 
   //exporta conexion y modelos
-module.exports = { sequelize, Usuario,Album ,Imagen,ImagenCompartida};
+module.exports = { sequelize, Usuario,Album ,Imagen,ImagenCompartida , SolicitudAmistad}
 
 

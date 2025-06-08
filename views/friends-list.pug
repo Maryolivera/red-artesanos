@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+
+  if solicitudes.length
+    ul
+      each sol in solicitudes
+        li
+          | #{sol.origen.nombre} te ha enviado una solicitud.
+          form(action=`/friends/${sol.id}/aceptar`, method="POST", style="display:inline")
+            button(type="submit") Aceptar
+          form(action=`/friends/${sol.id}/rechazar`, method="POST", style="display:inline")
+            button(type="submit") Rechazar
+  else
+    p No tienes solicitudes pendientes.
