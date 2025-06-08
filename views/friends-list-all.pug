@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  if amigos.length
+    ul
+      each amigo in amigos
+        li= amigo.nombre
+  else
+    p No tienes amigos aún.
+  a(href="/muro") ← Volver al muro

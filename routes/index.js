@@ -133,7 +133,37 @@ router.get('/friends', isLoggedIn, async (req, res) => {
     solicitudes
   });
 });
+//rutas lista amigos
+router.get('/friends/list', isLoggedIn, async (req, res) => {
+  const { SolicitudAmistad, Usuario } = require('../models');
+  const usuarioId = req.session.usuarioId;
 
+  // Buscar todas las solicitudes aceptadas donde este usuario sea origen o destino
+  const solicitudes = await SolicitudAmistad.findAll({
+    where: {
+      estado: 'aceptada',
+      [require('sequelize').Op.or]: [
+        { deId: usuarioId },
+        { paraId: usuarioId }
+      ]
+    }
+  });
+
+  // Conseguir los IDs de los amigos (el otro usuario en cada solicitud)
+  const amigoIds = solicitudes.map(sol =>
+    sol.deId === usuarioId ? sol.paraId : sol.deId
+  );
+
+  // Buscar datos de los amigos
+  const amigos = await Usuario.findAll({
+    where: { id: amigoIds }
+  });
+
+  res.render('friends-list-all', {
+    title: 'Mis amigos',
+    amigos
+  });
+});
 
 
 //rutas de albunes

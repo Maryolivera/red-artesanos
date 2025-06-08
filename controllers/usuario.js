@@ -74,7 +74,7 @@ exports.mostrarMuro = async (req, res) => {
 
     return res.render('muro', {
       title: 'Mi Muro',
-      usuario: req.session.usuarioNombre,
+      usuario: req.session.nombre,
       albums,
       imagenes
     });
