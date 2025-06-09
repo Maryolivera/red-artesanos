@@ -30,9 +30,14 @@ router.post('/registro', usuario.procesarRegistro);
 router.get('/login',     usuario.mostrarLogin);
 router.post('/login',    usuario.procesarLogin);
 
-router.get('/logout', usuario.procesarLogout);
 
 
+// Rutas de perfil 
+router.get('/perfil', isLoggedIn, usuario.mostrarPerfil);
+router.get('/perfil/editar', isLoggedIn, usuario.formularioEditarPerfil);
+router.post('/perfil/editar', isLoggedIn, upload.single('imagenPerfil'), usuario.procesarEditarPerfil);
+router.get('/perfil/password', isLoggedIn, usuario.formularioCambiarPassword);
+router.post('/perfil/password', isLoggedIn, usuario.procesarCambiarPassword);
 router.get('/muro', isLoggedIn, usuario.mostrarMuro);
 
 router.get('/usuarios', usuario.listarUsuarios);

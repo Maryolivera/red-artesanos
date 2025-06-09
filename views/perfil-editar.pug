@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/perfil/editar" method="POST" enctype="multipart/form-data")
+    label Nombre:
+    input(type="text" name="nombre" value=usuario.nombre required)
+    label Intereses:
+    textarea(name="intereses")= usuario.intereses
+    label Antecedentes:
+    textarea(name="antecedentes")= usuario.antecedentes
+
+    // Campo para la imagen de perfil
+    label Imagen de perfil:
+    if usuario.imagenPerfil
+      img(src=usuario.imagenPerfil, width="80")
+    input(type="file" name="imagenPerfil" accept="image/*")
+
+    button(type="submit") Guardar cambios
+  a(href="/perfil") Volver al perfil
+

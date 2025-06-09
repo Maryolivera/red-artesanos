@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  if usuario.imagenPerfil
+     img(src=usuario.imagenPerfil, width="100")
+  else
+     img(src="/uploads/avatar-default.png", width="100")
+
+  
+  p Nombre: #{usuario.nombre}
+  p Intereses: #{usuario.intereses}
+  p Antecedentes: #{usuario.antecedentes}
+  a.btn(href="/perfil/editar") Editar perfil
+  a.btn(href="/perfil/password") Cambiar contraseña
+  a.btn(href="/muro") Volver al muro
