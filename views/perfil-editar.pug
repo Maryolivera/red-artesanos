@@ -1,21 +1,37 @@
 extends layout
 
 block content
-  h1= title
+  h1 Editar Perfil
+
   form(action="/perfil/editar" method="POST" enctype="multipart/form-data")
     label Nombre:
     input(type="text" name="nombre" value=usuario.nombre required)
+    br
+
+    label Email:
+    input(type="email" name="email" value=usuario.email required)
+    br
+
     label Intereses:
     textarea(name="intereses")= usuario.intereses
+    br
+
     label Antecedentes:
     textarea(name="antecedentes")= usuario.antecedentes
+    br
 
-    // Campo para la imagen de perfil
-    label Imagen de perfil:
-    if usuario.imagenPerfil
-      img(src=usuario.imagenPerfil, width="80")
-    input(type="file" name="imagenPerfil" accept="image/*")
+    label Foto de Perfil:
+    input(type="file" name="foto_perfil")
+    if usuario.foto_perfil
+      img(src=`/uploads/${usuario.foto_perfil}` alt="Mi foto" width="80")
+    br
+
+    label
+      input(type="checkbox" name="portafolioPublico" checked=usuario.portafolioPublico)
+      | Mostrar mi portafolio públicamente
+    br
 
     button(type="submit") Guardar cambios
-  a(href="/perfil") Volver al perfil
+    a.btn(href="/perfil") Cancelar
+
 
