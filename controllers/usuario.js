@@ -27,11 +27,11 @@ exports.mostrarLogin = (req, res) => {
 exports.procesarLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await Usuario.findOne({ where: { email, password } });
+    const user = await Usuario.findOne({ where: { email } });
     if (user) {
       // Guardamos el usuario en la sesión
       req.session.usuarioId = user.id;
-      req.session.nombre = user.nombre;
+      req.session.usuarioNombre = user.nombre;
       return res.redirect('/muro'); 
     }
 

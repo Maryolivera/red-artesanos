@@ -12,3 +12,77 @@
   text-decoration: none;
   border-radius: 4px;
 }
+
+.notif-icon {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+
+
+#notif-count {
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0 0.4em;
+  font-size: 0.8rem;
+  vertical-align: super;
+  margin-left: 0.2em;
+}
+
+.toast {
+  position: fixed;
+  top: 4rem;
+  right: 1rem;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 0.8em 1em;
+  border-radius: 0.3em;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  z-index: 1000;
+}
+.toast.hide {
+  opacity: 0;
+}
+
+
+.navbar {
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+}
+
+
+/* Contenedor del nav */
+nav.navbar {
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  display: flex;           /* para alinear items horizontalmente */
+  justify-content: flex-end; /* sitúa la campana a la derecha */
+  align-items: center;
+}
+
+/* Tu enlace con la campana */
+.notif-icon {
+  position: relative;      /* para posicionar el badge respecto al icono */
+  font-size: 1.5rem;       /* tamaño de la campana 🔔 */
+  text-decoration: none;   /* quita subrayado */
+  color: #333;             /* color de la campana */
+  margin-left: 1rem;       /* separación respecto a otros elementos si los hubiera */
+}
+
+/* El circulito rojo con el número */
+.notif-icon .badge {
+  position: absolute;
+  top: -6px;               /* lo elevamos un poco encima del icono */
+  right: -10px;            /* lo desplazamos hacia la derecha */
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0 6px;          /* ajusta ancho del badge */
+  font-size: 0.75rem;
+  line-height: 1;          /* para centrar verticalmente el número */
+}

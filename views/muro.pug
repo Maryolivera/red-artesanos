@@ -6,16 +6,21 @@ block content
 
 
   h1= title
-  p Bienvenido/a, #{usuario}!
+  p Bienvenido/a, #{usuarioNombre}!
 
   .menu-acciones
     a.btn(href="/albums/new") Crear nuevo álbum
     a.btn(href="/images/new") Subir imagen
     a.btn(href="/images/compartidas") Imágenes compartidas
+    a.btn(href="/friend")
+      | Solicitudes recibidas
+      span#notif-count.badge 0
+
     a.btn(href="/friends") Solicitudes recibidas
-    a.btn(href="/friends/new") Enviar solicitud de amistad
-    a.btn(href="/friends/enviadas") Solicitudes enviadas
-    a.btn(href="/friends/list") Mis amigos
+
+    a.btn(href="/friend/new") Enviar solicitud de amistad
+    a.btn(href="/friend/enviadas") Solicitudes enviadas
+    a.btn(href="/friend/list") Mis amigos
     a.btn(href="/perfil") Mi perfil
     a.btn(href="/logout") Cerrar 
 

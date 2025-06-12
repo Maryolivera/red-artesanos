@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prueba Socket.IO</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Prueba Notificaciones</h1>
+  <button onclick="enviarNotificacion()">Enviar notificación</button>
+  <div id="notificaciones"></div>
+
+  <script>
+    const socket = io();
+
+    function enviarNotificacion() {
+      socket.emit('prueba-notificacion', { mensaje: "¡Hola desde el cliente!" });
+    }
+
+    socket.on('notificacion', data => {
+      const div = document.getElementById('notificaciones');
+      div.innerHTML += `<p>${data.mensaje}</p>`;
+    });
+  </script>
+</body>
+</html>
