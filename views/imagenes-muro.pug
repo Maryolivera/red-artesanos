@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+
+  if imagenes.length
+    .galeria
+      each img in imagenes
+        .thumb
+          img(src=`/${img.ruta}` width=100)
+          br
+          a.btn(href=`/images/${img.id}/compartir`) Compartir
+  else
+    p Aún no tienes imágenes subidas.

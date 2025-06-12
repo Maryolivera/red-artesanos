@@ -4,6 +4,8 @@ const router  = express.Router();
 const usuario = require('../controllers/usuario');
 
 const { isLoggedIn } = require('../middlewares/auth');
+const ctrlCompartir  = require('../controllers/compartir');
+const ctrlImagen = require('../controllers/imagen');
 
 
 
@@ -61,8 +63,9 @@ router.get('/images',     imagen.listarImagenes);
 
 // rutas de compartir imagen
 router.get('/images/:id/compartir',isLoggedIn,  compartir.mostrarFormulario);
-
+router.get('/images/mis',    isLoggedIn, ctrlImagen.listarMisImagenes);
 router.post('/images/:id/compartir',isLoggedIn,  compartir.procesarCompartir);
+//router.get('/images', isLoggedIn, ctrlImagen.listarMuro);
 
 
 router.get('/logout', usuario.procesarLogout);

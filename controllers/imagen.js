@@ -1,5 +1,10 @@
 const path   = require('path');
+
+
 const { Imagen,Album } = require('../models');
+const { Op } = require('sequelize');
+
+
 exports.mostrarDetalle = async (req, res) => {
   try {
     
@@ -59,7 +64,7 @@ exports.listarImagenes = async (req, res) => {
       order: [['fecha_subida', 'DESC']]
     });
 
-    return res.render('imagen-list', {
+    return res.render('mis-imagenes', {
       title: 'Listado de Imágenes',
       imagenes
     });
@@ -68,3 +73,46 @@ exports.listarImagenes = async (req, res) => {
     return res.send('❌ Error al listar imágenes.');
   }
 };
+
+
+// Listar todas las imágenes de mi muro:
+
+exports.listarMuro = async (req, res) => {
+  const userId = req.session.usuarioId;
+
+  // Busca sólo las imágenes cuyo álbum te pertenezca
+  const imagenes = await Imagen.findAll({
+    include: [{
+      model: Album,
+      where: { usuarioId: userId }        
+    }]
+  });
+
+  res.render('imagenes-muro', {
+    title: 'Mis imágenes',
+    imagenes
+  });
+};
+
+exports.listarMisImagenes = async (req, res) => {
+  const usuarioId = req.session.usuarioId;
+  try {
+    const imagenes = await Imagen.findAll({
+      include: [{
+        model: Album,
+        as: 'album',            // <- aquí el alias exacto
+        where: { usuarioId },   // sólo álbumes de este usuario
+        attributes: []          // opcional: no necesitas campos del álbum
+      }]
+    });
+
+    res.render('mis-imagenes', {
+      title: 'Mis imágenes',
+      imagenes
+    });
+  } catch (err) {
+    console.error('🔴 Error al listar tus imágenes:', err);
+    res.send(`❌ Error al listar tus imágenes: ${err.message}`);
+  }
+};
+

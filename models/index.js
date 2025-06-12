@@ -77,6 +77,33 @@ ImagenCompartida.belongsTo(Usuario, {
   as: 'destino'
 });
 
+
+// Un usuario puede compartir muchas imágenes (origen)
+// y una imagen puede ser compartida por muchos usuarios.
+Usuario.belongsToMany(Imagen, {
+  through: ImagenCompartida,
+  as: 'imágenesCompartidasPorMi',
+  foreignKey: 'usuarioOrigenId',
+  otherKey: 'imagenId'
+});
+
+// Un usuario puede recibir muchas imágenes compartidas (destino)
+// y una imagen puede ir a muchos destinos.
+Usuario.belongsToMany(Imagen, {
+  through: ImagenCompartida,
+  as: 'imágenesCompartidasConmigo',
+  foreignKey: 'usuarioDestinoId',
+  otherKey: 'imagenId'
+});
+
+// Opcionalmente, para navegar desde la imagen:
+Imagen.belongsToMany(Usuario, {
+  through: ImagenCompartida,
+  as: 'compartidaCon',
+  foreignKey: 'imagenId',
+  otherKey: 'usuarioDestinoId'
+});
+
 // Asociaciones:
 Usuario.hasMany(SolicitudAmistad, { foreignKey: 'deId',   as: 'solicitudesEnviadas' });
 SolicitudAmistad.belongsTo(Usuario, { foreignKey: 'deId',   as: 'origen' });
