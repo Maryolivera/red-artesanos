@@ -1,17 +1,177 @@
-.grid { display: flex; flex-wrap: wrap; gap: 1rem; }
-.thumb { text-align: center; }
-.btn-container {
-  margin-bottom: 1rem; 
+body {
+  background: #e6f7ff;             
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.btn {
-  display: inline-block; 
-  padding: 0.5em 1em;
-  background: #007bff;
-  color: white;
-  text-decoration: none;
+
+.btn-primary {
+  background-color: #007bff !important;
+  border-color: #007bff !important;
+  color: #fff !important;
+}
+.btn-primary:hover {
+  background-color: #0056b3 !important;
+  border-color: #0056b3 !important;
+}
+
+
+.btn-secondary {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #fff !important;
+}
+.btn-secondary:hover {
+  background-color: #5a6268 !important;
+  border-color: #5a6268 !important;
+}
+
+.btn-secondary.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.container .d-flex img {
+  object-fit: cover;
+}
+.container .d-flex h1 {
+  margin: 0;
+}
+
+
+.media {
+  align-items: flex-start;
+}
+.media img {
   border-radius: 4px;
 }
+.media-body a {
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+
+.container {
+  max-width: 600px;
+  margin: 100px auto;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+
+h1.display-4 {
+  font-weight: 300;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+
+p.lead {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+
+.btn {
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+
+.login-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+
+.login-form .form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.1rem rgba(0,123,255,0.25);
+}
+
+
+.btn-block {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+
+body {
+  background: #e6f7ff;
+}
+h2.display-4 {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 300;
+  color: #333;
+}
+
+
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+
 
 .notif-icon {
   position: fixed;
@@ -33,7 +193,7 @@
   margin-left: 0.2em;
 }
 
-.toast {
+.toast.persistent {
   position: fixed;
   top: 4rem;
   right: 1rem;
@@ -56,33 +216,110 @@
 }
 
 
-/* Contenedor del nav */
 nav.navbar {
   background: #f8f9fa;
   padding: 0.5rem 1rem;
-  display: flex;           /* para alinear items horizontalmente */
-  justify-content: flex-end; /* sitúa la campana a la derecha */
+  display: flex;           
+  justify-content: flex-end; 
   align-items: center;
 }
-
-/* Tu enlace con la campana */
 .notif-icon {
-  position: relative;      /* para posicionar el badge respecto al icono */
-  font-size: 1.5rem;       /* tamaño de la campana 🔔 */
-  text-decoration: none;   /* quita subrayado */
-  color: #333;             /* color de la campana */
-  margin-left: 1rem;       /* separación respecto a otros elementos si los hubiera */
+  position: relative;      
+  font-size: 1.5rem;      
+  text-decoration: none;   
+  color: #333;             
+  margin-left: 1rem;       
+}
+.registro-container {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px 25px 25px 25px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(50, 80, 130, 0.15);
 }
 
-/* El circulito rojo con el número */
-.notif-icon .badge {
-  position: absolute;
-  top: -6px;               /* lo elevamos un poco encima del icono */
-  right: -10px;            /* lo desplazamos hacia la derecha */
-  background: red;
-  color: white;
+.registro-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.3rem;
+  color: #223568;
+}
+
+.registro-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.registro-container input[type="text"],
+.registro-container input[type="email"],
+.registro-container input[type="password"] {
+  padding: 10px 14px;
+  border: 1.5px solid #bdd1f3;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  background: #f5faff;
+}
+
+.registro-container button[type="submit"] {
+  background: #217cf3;
+  color: #fff;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.registro-container button[type="submit"]:hover {
+  background: #185bb5;
+}
+
+.registro-container .login-link {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 1rem;
+}
+
+.registro-container .login-link a {
+  color: #217cf3;
+  text-decoration: none;
+}
+.registro-container .login-link a:hover {
+  text-decoration: underline;
+}
+
+.form-wrapper {
+  max-width: 400px;      
+  margin: 80px auto;    /
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.container {
+  padding: 0 1rem;     
+  max-width: 960px;     
+  margin: 0 auto;      
+}
+
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+.rounded-circle {
   border-radius: 50%;
-  padding: 0 6px;          /* ajusta ancho del badge */
-  font-size: 0.75rem;
-  line-height: 1;          /* para centrar verticalmente el número */
+  object-fit: cover;
+}
+
+.media-object {
+  object-fit: cover;
 }

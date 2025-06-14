@@ -1,18 +1,16 @@
 const express = require('express');
 const router  = express.Router();
 
-const usuario = require('../controllers/usuario');
-
 const { isLoggedIn } = require('../middlewares/auth');
-const ctrlCompartir  = require('../controllers/compartir');
-const ctrlImagen = require('../controllers/imagen');
+const upload = require('../middlewares/upload');
 
-
-
+//const ctrlImagen = require('../controllers/imagen');
+const usuario = require('../controllers/usuario');
 const album= require('../controllers/album'); 
 const imagen     = require('../controllers/imagen');
-const upload = require('../middlewares/upload');
 const compartir = require('../controllers/compartir');
+
+
 router.get('/albums/:id/galeria', album.mostrarGaleria);
 
 
@@ -24,6 +22,12 @@ router.get('/', (req, res) => {
   usuario: req.session.usuarioId ? req.session.usuarioNombre : null
    });
 })
+
+router.get('/images/compartidas',
+  isLoggedIn,
+  imagen.listarCompartidas
+);
+
 
 //rutas de usuario
 router.get('/registro',  usuario.mostrarRegistro);
@@ -59,12 +63,13 @@ router.get('/albums/:id/galeria', album.mostrarGaleria);
 
 router.get('/images/new', imagen.mostrarFormulario); 
 router.post('/images',    imagen.procesarUpload);
-router.get('/images',     imagen.listarImagenes);
+//router.get('/images',     imagen.listarImagenes);
 
 // rutas de compartir imagen
 router.get('/images/:id/compartir',isLoggedIn,  compartir.mostrarFormulario);
-router.get('/images/mis',    isLoggedIn, ctrlImagen.listarMisImagenes);
+router.get('/images/mis',    isLoggedIn, imagen.listarMisImagenes);
 router.post('/images/:id/compartir',isLoggedIn,  compartir.procesarCompartir);
+router.post('/images/:id/comentario', isLoggedIn, compartir.crearComentario);
 //router.get('/images', isLoggedIn, ctrlImagen.listarMuro);
 
 

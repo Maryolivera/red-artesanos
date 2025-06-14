@@ -1,27 +1,79 @@
 // controllers/compartir.js
-const { Imagen, Usuario, ImagenCompartida } = require('../models');
+const { Imagen, Usuario, ImagenCompartida,SolicitudAmistad,Comentario,Album } = require('../models');
 const { Op } = require('sequelize');
 
 exports.mostrarFormulario = async (req, res) => {
-  try {
-    const usuarios = await Usuario.findAll({
-      where: { id: { [Op.ne]: req.session.usuarioId } },
-      attributes: ['id','nombre']
-    });
-    const imagen = await Imagen.findByPk(req.params.id);
-    if (!imagen) {
-      return res.status(404).send('❌ Imagen no encontrada');
+ const miId = req.session.usuarioId;
+  //  lista de amigos (aceptadas, unidireccional):
+  const relaciones = await SolicitudAmistad.findAll({
+    where: { 
+      estado: 'aceptada',
+      [Op.or]: [
+        { deId: miId },
+        { paraId: miId }
+      ]
     }
-    res.render('compartir-form', {
-      title: 'Compartir Imagen',
-      usuarios,
-      imagen
+  });
+  // Extrae sólo los IDs del otro extremo de cada relación:
+  const amigoIds = relaciones.map(r =>
+    r.deId === miId ? r.paraId : r.deId
+  );
+  // carga sólo esos usuarios:
+  const usuarios = await Usuario.findAll({
+    where: { id: { [Op.in]: amigoIds } },
+    attributes: ['id','nombre']
+  });
+  const albums = await Album.findAll({
+    where: { usuarioId: miId },
+    attributes: ['id','titulo']
+  })
+
+  const imagen = await Imagen.findByPk(req.params.id);
+  return res.render('compartir-form', {
+    title: 'Compartir Imagen',
+    usuarios,
+    albums,
+    imagen
+  });
+};
+
+
+  exports.crearComentario = async (req, res) => {
+  try {
+    const autorId  = req.session.usuarioId;
+    const imagenId = parseInt(req.params.id, 10);
+    const { texto } = req.body;
+
+    // 1) Crear comentario
+    const comentario = await Comentario.create({
+      texto,
+      autorId,
+      imagenId
     });
-  } catch (e) {
-    console.error(e);
-    res.status(500).send('❌ Error al cargar el formulario de compartir');
+
+    //  Recuperar la imagen sin includes complicados
+    const imagen = await Imagen.findByPk(imagenId);
+   
+    const ownerId = imagen.usuarioId;   
+
+    //  Emitir notificación
+    const excerpt = texto.length > 30
+      ? texto.slice(0, 30) + '…'
+      : texto;
+    req.io.to(`user-${ownerId}`).emit('imageComment', {
+      imageId: imagenId,
+      from:    req.session.usuarioNombre,
+      excerpt
+    });
+
+    return res.redirect('/muro');
+  } catch (err) {
+    console.error('Error en crearComentario:', err);
+    return res.status(500).send('❌ Error al crear comentario');
   }
 };
+
+
 
 exports.procesarCompartir = async (req, res) => {
   try {
@@ -34,12 +86,8 @@ exports.procesarCompartir = async (req, res) => {
       return res.status(400).send('❌ Debes elegir un usuario destino');
     }
 
-    // opcional: validar que la imagen exista y te pertenezca
-    const imagen = await Imagen.findByPk(imagenId);
-    if (!imagen /* || imagen.album.usuarioId !== usuarioOrigenId */) {
-      return res.status(404).send('❌ Imagen inválida o no tienes permisos');
-    }
-
+  
+    
     await ImagenCompartida.create({
       imagenId,
       usuarioOrigenId,

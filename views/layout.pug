@@ -4,16 +4,17 @@ html(lang="es")
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Artesanos · #{title || 'Mi aplicación'}
-    //– Para la sala de socket
+   
     script.
       window.CURRENT_USER_ID = !{JSON.stringify(usuarioId)};
     link(rel="stylesheet", href="/css/style.css")
   body
     
     nav.navbar
-      a.notif-icon(href="/friend")
-        | 🔔 
-        span#notif-count.badge #{pendingRequests || 0}
+      if usuarioId
+        a.notif-icon(href="/friend")
+          | 🔔 
+          span#notif-count.badge #{pendingRequests || 0}
 
     
     block content

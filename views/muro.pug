@@ -1,44 +1,56 @@
 extends layout
 
+
 block content
-  
- 
-
-
-  h1= title
-  p Bienvenido/a, #{usuarioNombre}!
-
-  .menu-acciones
-    a.btn(href="/albums/new") Crear nuevo álbum
-    a.btn(href="/images/new") Subir imagen
-    a.btn(href="/images/mis")    Mis imágenes
-
-    a.btn(href="/images/compartidas") Imágenes compartidas
-    a.btn(href="/friend") Solicitudes recibidas
-      
+  .container.mt-4
+    //- --- CABECERA ---
+    .d-flex.align-items-center.justify-content-center.mb-4
+      if usuarioFoto
+        img.rounded-circle(src=`/${usuarioFoto}`, alt="Foto de perfil", width="60", height="60")
+      else
+        img.rounded-circle(src="/images/default-avatar.png", alt="Avatar por defecto", width="60", height="60")
+      h1.ml-3 Bienvenid@, #{usuarioNombre}!
 
     
+    nav.mb-5
+      .btn-group(role="group")
+        a.btn.btn-primary(href="/albums/new") Crear álbum
+        a.btn.btn-primary(href="/images/new") Subir imagen
+        a.btn.btn-primary(href="/images/compartidas") Imágenes compartidas
+        a.btn.btn-primary(href="/friend/new") Enviar solicitud
+       
+        a.btn.btn-primary(href="/friend/list") Mis amigos
+        a.btn.btn-primary(href="/perfil") Mi perfil
+       
+        a.btn.btn-secondary.ml-2(href="/logout") Cerrar sesión
 
-    a.btn(href="/friend/new") Enviar solicitud de amistad
-    a.btn(href="/friend/enviadas") Solicitudes enviadas
-    a.btn(href="/friend/list") Mis amigos
-    a.btn(href="/perfil") Mi perfil
-    a.btn(href="/logout") Cerrar 
+    hr
 
+    
+    if albums.length
+      h2 Mis álbumes
+      ul
+        each alb in albums
+          li= alb.titulo
+    else
+      p.text-muted No tienes álbumes.
 
-  hr
+    hr
 
-  if albums.length
-    h2 Mis álbumes
-    ul
-      each alb in albums
-        li= alb.titulo
-
-  if imagenes.length
-    h2 Mis imágenes
-    ul
+    
+    if imagenes.length
+      h2 Mis imágenes
       each img in imagenes
-        li
-          img(src=img.ruta, width="80")
-  else
-    p Aún no tienes contenido en tu muro.
+        .media.mb-4
+          img.media-object.mr-3(src=`/${img.ruta}`, width="120")
+          .media-body
+           
+            if img.descripcion
+              p.mb-1= img.descripcion
+            else
+              p.mb-1
+                em Sin descripción
+            
+            a.btn.btn-sm.btn-primary.ml-1(href=`/images/${img.id}/compartir`) Compartir
+    else
+      p.text-muted No tienes imágenes.

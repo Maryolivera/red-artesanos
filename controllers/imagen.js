@@ -1,9 +1,36 @@
 const path   = require('path');
 
 
-const { Imagen,Album } = require('../models');
+const { Imagen,Album,Usuario,ImagenCompartida } = require('../models');
 const { Op } = require('sequelize');
 
+
+exports.listarCompartidas = async (req, res) => {
+  const miId = req.session.usuarioId;
+  // Busca todas las filas donde usuarioDestinoId = yo
+  const rows = await ImagenCompartida.findAll({
+    where: { usuarioDestinoId: miId },
+    include: [{
+      model: Imagen,
+      as: 'imagen'
+    },{
+      model: Usuario,
+      as: 'origen',
+      attributes: ['id','nombre']
+    }]
+  });
+  // Mapea al formato para la vista:
+  const compartidas = rows.map(r => ({
+    id:          r.imagen.id,
+    ruta:        r.imagen.ruta,
+    descripcion: r.imagen.descripcion,
+    from:        r.origen.nombre
+  }));
+  res.render('imagen-compartidas', {
+    title: 'Imágenes compartidas conmigo',
+    compartidas
+  });
+};
 
 exports.mostrarDetalle = async (req, res) => {
   try {
@@ -31,7 +58,12 @@ exports.mostrarDetalle = async (req, res) => {
 // Mostrar formulario 
 exports.mostrarFormulario = async (req, res) => {
   try {
-    const albums = await Album.findAll();
+    const usuarioId = req.session.usuarioId;
+    const albums = await Album.findAll({
+    where: { usuarioId },
+    attributes: ['id', 'titulo']
+  });
+    
     res.render('imagen-upload', {
       title: 'Subir Imagen', albums
     });
@@ -57,30 +89,14 @@ exports.procesarUpload = async (req, res) => {
   res.redirect('/images');
 };
 
-// Listar todas las imágenes
-exports.listarImagenes = async (req, res) => {
-  try {
-    const imagenes = await Imagen.findAll({
-      order: [['fecha_subida', 'DESC']]
-    });
-
-    return res.render('mis-imagenes', {
-      title: 'Listado de Imágenes',
-      imagenes
-    });
-  } catch (e) {
-    console.error(e);
-    return res.send('❌ Error al listar imágenes.');
-  }
-};
 
 
-// Listar todas las imágenes de mi muro:
+
 
 exports.listarMuro = async (req, res) => {
   const userId = req.session.usuarioId;
 
-  // Busca sólo las imágenes cuyo álbum te pertenezca
+  // Busca sólo las imágenes por album 
   const imagenes = await Imagen.findAll({
     include: [{
       model: Album,
@@ -100,9 +116,9 @@ exports.listarMisImagenes = async (req, res) => {
     const imagenes = await Imagen.findAll({
       include: [{
         model: Album,
-        as: 'album',            // <- aquí el alias exacto
-        where: { usuarioId },   // sólo álbumes de este usuario
-        attributes: []          // opcional: no necesitas campos del álbum
+        as: 'album',           
+        where: { usuarioId },  
+        attributes: []          
       }]
     });
 

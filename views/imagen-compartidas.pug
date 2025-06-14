@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1= title
+
+  if compartidas.length
+    ul.imagenes-compartidas
+      each img in compartidas
+        li.imagen-compartida
+          img(src=`/${img.ruta}`, width="150")
+          if img.descripcion
+            p.descripcion= img.descripcion
+          p.origen
+            | Compartida por
+            strong= ` ${img.from}`
+          //- Enlace para ver detalle y comentar
+          
+          form(method="POST", action=`/images/${img.id}/comentario`)
+              textarea(name="texto", required)
+              button(type="submit") Comentar
+
+
+  else
+    p No tienes imágenes compartidas contigo.

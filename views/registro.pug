@@ -1,13 +1,27 @@
 extends layout
 
 block content
-  h2= title
-  if error
-    p(style="color:red")= error
-  form(action="/registro", method="POST")
-    input(type="text",  name="nombre",    placeholder="Nombre", required)
-    input(type="email", name="email",     placeholder="Email",  required)
-    input(type="password", name="password", placeholder="Contraseña", required)
-    button(type="submit") Registrarse
-  hr
-  a(href="/login") ← Ir al login
+  .registro-container
+    h1= title
+
+    if error
+      .alert.alert-danger #{error}
+
+    form(method="POST", action="/registro")
+      .form-group
+        label(for="nombre") Nombre
+        input#nombre.form-control(type="text", name="nombre", required)
+      .form-group
+        label(for="apellido") Apellido
+        input#apellido.form-control(type="text", name="apellido", required)
+      .form-group
+        label(for="email") Correo electrónico
+        input#email.form-control(type="email", name="email", required)
+      .form-group
+        label(for="password") Contraseña
+        input#password.form-control(type="password", name="password", required)
+      button.btn.btn-primary.btn-block(type="submit") Registrarme
+
+    .text-center.mt-3
+      a.btn.btn-secondary(href="/") ← Volver al inicio
+      a.btn.btn-link(href="/login") ¿Ya tienes cuenta? Inicia sesión

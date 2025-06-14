@@ -1,49 +1,83 @@
 const { Usuario, Album, Imagen } = require('../models');
-
+const bcrypt = require('bcryptjs');
 
 exports.mostrarRegistro = (req, res) => {
   res.render('registro', { title: 'Registro' });
 };
 
+exports.mostrarLogin = (req, res) => {
+  res.render('login', { title: 'Iniciar sesión', error: null });
+};
+
+
+// Procesar registro: hash de password antes de guardar
 exports.procesarRegistro = async (req, res) => {
-  const { nombre, email, password } = req.body;
+  const { nombre, apellido, email, password } = req.body;
   try {
-    await Usuario.create({ nombre, email, password });
-     return res.redirect('/login');
+    // Validaciones mínimas
+    if (!nombre || !apellido || !email || !password) {
+      return res.render('registro', {
+        title: 'Registro',
+        error: 'Todos los campos son obligatorios'
+      });
+    }
+    // Comprueba que no exista el email
+    const ya = await Usuario.findOne({ where: { email } });
+    if (ya) {
+      return res.render('registro', {
+        title: 'Registro',
+        error: 'El email ya está registrado'
+      });
+    }
+    //  Hashea la contraseña
+    const hash = await bcrypt.hash(password, 10);
+    //  Crea el usuario
+    await Usuario.create({ nombre, apellido, email, password: hash });
+    return res.redirect('/login');
   } catch (err) {
-    
-  
+    console.error(err);
     return res.render('registro', {
       title: 'Registro',
-      error: 'El email ya existe o faltan datos'
+      error: 'Error interno. Intenta de nuevo'
     });
   }
 };
 
-exports.mostrarLogin = (req, res) => {
-  res.render('login', { title: 'Login' });
-};
-
+// Procesar login con verificación de contraseña
 exports.procesarLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await Usuario.findOne({ where: { email } });
-    if (user) {
-      // Guardamos el usuario en la sesión
-      req.session.usuarioId = user.id;
-      req.session.usuarioNombre = user.nombre;
-      return res.redirect('/muro'); 
+    if (!user) {
+      // usuario no registrado
+      return res.render('login', {
+        title: 'Login',
+        error: 'Usuario no registrado. Regístrate primero.',
+        showRegister: true
+      });
     }
 
-     return res.render('login', {
-      title: 'Login',
-      error: 'Credenciales inválidas'
-    });
+    // comparamos la contraseña con el hash
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      // contraseña incorrecta
+      return res.render('login', {
+        title: 'Login',
+        error: 'Contraseña incorrecta.',
+        showForgot: true  // para mostrar enlace “Olvidé mi contraseña”
+      });
+    }
+
+    // todo OK: guardamos sesión y vamos al muro
+    req.session.usuarioId     = user.id;
+    req.session.usuarioNombre = user.nombre;
+    req.session.foto      = user.foto_perfil; 
+    return res.redirect('/muro');
   } catch (err) {
     console.error(err);
     return res.render('login', {
       title: 'Login',
-      error: 'Error en el servidor'
+      error: 'Error en el servidor. Intenta más tarde.'
     });
   }
 };
@@ -75,6 +109,7 @@ exports.mostrarMuro = async (req, res) => {
     return res.render('muro', {
       title: 'Mi Muro',
       usuario: req.session.nombre,
+      usuarioFoto: req.session.foto_perfil,
       albums,
       imagenes
     });

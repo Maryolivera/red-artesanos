@@ -8,10 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    nombre: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
+   
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,6 +18,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+
+
+    nombre: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    apellido:{
+       type: DataTypes.STRING,
+       allowNull: false,
+       },
+
+  
+    
+
     foto_perfil: {
       type: DataTypes.STRING,
       allowNull: true

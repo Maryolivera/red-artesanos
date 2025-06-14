@@ -2,12 +2,14 @@ extends layout
 
 
 block content
-  h1 Artesanos.com
-  p El espacio para que los artesanos compartan sus creaciones.
+  .container
+    h1.display-4 Artesanos.com
+    p.lead Bienvenido a Artesanos.com, el espacio perfecto para que artesanos como tú compartan sus creaciones y encuentren inspiración.
 
-    div.btn-container
-      a.btn(href='/registro') Registrarse
-    div.btn-container
-      a.btn(href='/login') Iniciar sesión
- 
+    .btn-container
+      a.btn.btn-primary(href='/registro') Registrarse
+      a.btn.btn-secondary(href='/login')    Iniciar sesión
+
+
+
     

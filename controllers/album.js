@@ -40,8 +40,8 @@ exports.crearAlbum = async (req, res) => {
 
     res.redirect('/albums');
   } catch (err) {
-    // MOSTRÁ EL ERROR REAL EN CONSOLA Y EN LA VISTA:
-    console.error('Error al crear álbum:', err);
+    
+    
     res.render('album-create', {
       title: 'Crear Álbum',
       error: err.message  

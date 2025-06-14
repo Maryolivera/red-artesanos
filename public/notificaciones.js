@@ -12,20 +12,28 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.on('friendRequest', data => {
     console.log('[CLIENT] EVENT friendRequest llegó:', data);
     // data.from.nombre contiene el nombre de quien envía
-    pendingMsgs.push(`${data.from.nombre} te ha enviado una solicitud`);
+    pendingMsgs.push(`${data.fronName} te ha enviado una solicitud`);
     updateBadge();
   });
 
   //  Escuchar respuesta a tu solicitud (aceptada/rechazada)
-  socket.on('friendRequestResponse', ({ requestId, accepted }) => {
-    console.log('[CLIENT] EVENT friendRequestResponse llegó:', { requestId, accepted });
-    pendingMsgs.push(
-      accepted
-        ? '¡Tu solicitud fue aceptada!'
-        : 'Tu solicitud fue rechazada.'
-    );
-    updateBadge();
+  socket.on('friendRequestResponse', ({ requestId, accepted, fronName }) => {
+  const msg = accepted
+    ? `${fronName} aceptó tu solicitud.`
+    : `${fronName} rechazó tu solicitud.`;
+  showPersistentToast(msg, {
+    label: 'OK',
+    onAction: () => window.location.href = '/muro'
   });
+})
+
+  // cuando llegue un comentario
+socket.on('imageComment', data => {
+  console.log('[SOCKET] comentario en mi imagen:', data);
+  incrementBadge();
+  showPersistentToast(`${data.from} comentó tu imagen: "${data.texto}"`);
+});
+
 
   // Función común para incrementar badge
   function updateBadge() {
@@ -52,14 +60,19 @@ if (notifIcon) {
   });
 }
 
-  
-function showToast(message) {
+ function showPersistentToast(message) {
   const t = document.createElement('div');
-  t.className = 'toast';
-  t.innerText = message;
+  t.className = 'toast persistent';
+  t.innerText = message + ' (Enter para cerrar)';
   document.body.appendChild(t);
-  setTimeout(() => {
-    t.classList.add('hide');
-    setTimeout(() => t.remove(), 500);
-  }, 3000);
-}})
+
+  function closeOnEnter(e) {
+    if (e.key === 'Enter') {
+      t.remove();
+      document.removeEventListener('keydown', closeOnEnter);
+    }
+  }
+  document.addEventListener('keydown', closeOnEnter);
+}
+ 
+})

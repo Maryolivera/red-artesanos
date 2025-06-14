@@ -1,6 +1,66 @@
-// controllers/solicitudAmistad.js
-const { SolicitudAmistad, Usuario } = require('../models');
+const { SolicitudAmistad, Usuario,Album,ImagenCompartida,Imagen } = require('../models');
 const { Op } = require('sequelize');
+
+exports.aceptarSolicitud = async (req, res) => {
+  const solicitudId = parseInt(req.params.id, 10);
+
+  //Buscamos la solicitud
+  const solicitud = await SolicitudAmistad.findByPk(solicitudId);
+  if (!solicitud) {
+    return res.status(404).send('Solicitud no encontrada');
+  }
+
+  //  La marcamos como aceptada
+  solicitud.estado = 'aceptada';
+  await solicitud.save();
+
+  //  Obtenemos datos del usuario que acaba de aceptar (para el título)
+  const usuarioAcepta = await Usuario.findByPk(solicitud.paraId);
+   
+   const fronName = usuarioAcepta.nombre; 
+
+  //  Creamos un álbum en el perfil del que envió la solicitud
+  const nuevoAlbum = await Album.create({
+    titulo: `${usuarioAcepta.nombre} ${usuarioAcepta.apellido}`,
+    usuarioId: solicitud.deId
+  });
+
+  //  todas las imágenes que el usuarioAcepta compartió con el solicitante
+  const compartidas = await ImagenCompartida.findAll({
+    where: {
+      usuarioOrigenId: solicitud.paraId,
+      usuarioDestinoId: solicitud.deId
+    }
+  });
+
+  //  Asociamos esas imágenes al nuevo álbum
+  
+  await Promise.all(compartidas.map(c => {
+    return Imagen.update(
+      { albumId: nuevoAlbum.id },
+      { where: { id: c.imagenId } }
+    );
+  }));
+
+  //  Notificamos la solicitud de que fue aceptada
+  req.io
+    .to(`user-${solicitud.deId}`)
+    .emit('friendRequestResponse', {
+      requestId: solicitudId,
+      accepted: true,
+      fronName
+    });
+
+
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+    return res.json({ ok: true });
+  }
+  
+  res.redirect('/friends');
+};
+
+
+
 
 exports.listarSolicitudesRecibidas = async (req, res) => {
   const usuarioId = req.session.usuarioId;
@@ -56,6 +116,7 @@ exports.listarAmigos = async (req, res) => {
 };
 
 exports.mostrarFormulario = async (req, res) => {
+  console.log('SESSION usuarioId:', req.session.usuarioId);
   const usuarioId = req.session.usuarioId;
   const usuarios = await Usuario.findAll({
     where: { id: { [Op.ne]: usuarioId } }
@@ -87,19 +148,7 @@ exports.mostrarFormulario = async (req, res) => {
 };
 
 
-exports.aceptarSolicitud = async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  await SolicitudAmistad.update({ estado: 'aceptada' }, { where: { id } });
-
-  const sol = await SolicitudAmistad.findByPk(id);
-  if (sol) {
-    req.io.to(`user-${sol.deId}`).emit('friendRequestResponse', {
-      requestId: id,
-      accepted: true
-    });
-  }
-  res.redirect('/muro');
-};
+;
 
 exports.rechazarSolicitud = async (req, res) => {
   const id = parseInt(req.params.id, 10);
@@ -107,13 +156,30 @@ exports.rechazarSolicitud = async (req, res) => {
 
   const sol = await SolicitudAmistad.findByPk(id);
   if (sol) {
+     const usuarioRechaza = await Usuario.findByPk(sol.paraId);
+    const fronName = usuarioRechaza.nombre; 
     req.io.to(`user-${sol.deId}`).emit('friendRequestResponse', {
       requestId: id,
-      accepted: false
+      accepted: false,
+      fronName
     });
   }
   res.redirect('/muro');
 };
 
 
+// controllers/solicitudAmistad.js
+exports.mostrarFormulario = async (req, res) => {
+  const usuarioId = req.session.usuarioId;
+ console.log('SESSION usuarioId =', usuarioId);
+  const usuarios = await Usuario.findAll({
+    where: { id: { [Op.ne]: usuarioId } },
+    attributes: ['id','nombre','apellido']
+  });
+  console.log('Usuarios encontrados:', usuarios.length, usuarios);
+  res.render('friend-new', {
+    title: 'Enviar solicitud de amistad',
+    usuarios     
+  });
+};
 

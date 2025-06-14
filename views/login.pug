@@ -1,10 +1,26 @@
 extends layout
 
 block content
-  h2= title
-  if error
-    p(style="color:red")= error
-  form(action="/login", method="POST")
-    input(type="email",    name="email",    placeholder="Email",    required)
-    input(type="password", name="password", placeholder="Contraseña", required)
-    button(type="submit") Entrar
+  .registro-container
+    h1= title
+
+   
+    if error
+      .alert.alert-danger #{error}
+
+    form.login-form(method="POST", action="/login")
+      .form-group
+        label(for="email") Correo electrónico
+        input#email.form-control(type="email", name="email", required)
+
+      .form-group
+        label(for="password") Contraseña
+        input#password.form-control(type="password", name="password", required)
+
+      button.btn.btn-primary.btn-block(type="submit") Iniciar sesión
+
+    .text-center.mt-3
+      a.btn.btn-secondary(href="/") ← Volver al inicio
+      a.btn.btn-link(href="/registro") ¿No tienes cuenta? Regístrate
+
+

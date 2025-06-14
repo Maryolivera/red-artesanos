@@ -9,32 +9,31 @@ const { sequelize } = require('./models');
 const app    = express();
 const server = http.createServer(app);
 
-// Socket.IO forzado a WebSocket
 const io = new Server(server, { transports: ['websocket'] });
 
-
-app.set('view engine', 'pug');
-
-
-app.use(express.urlencoded({ extended: true }));
-
-// Sirve estáticos (CSS, JS, imágenes…)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Sesiones con SequelizeStore
 app.use(session({
-  secret: 'un-secreto-muy-seguro',
+  secret: 'un-secreto',       
   store: new SequelizeStore({ db: sequelize }),
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { secure: false }             
 }));
+
+new SequelizeStore({ db: sequelize }).sync();
+
+app.set('view engine', 'pug');
+app.use(express.urlencoded({ extended: true }));
+
+// Sirve estáticos 
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Inyecta req.io y variables de sesión en res.locals
 app.use((req, res, next) => {
-  req.io = io;                                     // para tus controllers
+  req.io = io;                                     
   res.locals.usuarioId     = req.session.usuarioId     || null;
   res.locals.usuarioNombre = req.session.usuarioNombre || null;
+  res.locals.usuarioFoto   = req.session.usuarioFoto   || null;
   next();
 });
 
