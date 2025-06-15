@@ -6,12 +6,20 @@ const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const path    = require('path');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'mysql',
-  dialectOptions: {
-    
+const sequelize = new Sequelize(
+  process.env.DB_NAME,   // nombre de la BD
+  process.env.DB_USER,   // usuario de MySQL
+  process.env.DB_PASS,   // contraseña
+  {
+    host:     process.env.DB_HOST,        
+    port:     parseInt(process.env.DB_PORT, 10),
+    dialect:  'mysql',
+    dialectOptions: { /* … */ },
+    logging: false
   }
-});
+);
+
+
 
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const store = new SequelizeStore({ db: sequelize });

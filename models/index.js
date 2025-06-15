@@ -1,20 +1,24 @@
 require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error('❌  La variable de entorno DATABASE_URL no está definida');
-}
 
-// Crea la instancia de Sequelize
-const sequelize = new Sequelize(connectionString, {
-  dialect: 'mysql',
-  protocol: 'mysql',
-  logging: false,
-  dialectOptions: {
-    
-    
+// Inicializamos Sequelize con vars individuales en lugar de DATABASE_URL
+const sequelize = new Sequelize(
+  process.env.DB_NAME,                      // p.ej. "red_social"
+  process.env.DB_USER,                      // p.ej. "root"
+  process.env.DB_PASS,                      // p.ej. "" o tu password
+  {
+    host:     process.env.DB_HOST,          // p.ej. "127.0.0.1"
+    port:     parseInt(process.env.DB_PORT, 10), // p.ej. 3306
+    dialect:  'mysql',
+    logging:  false,
+    dialectOptions: {
+      // ssl: { rejectUnauthorized: false }  // si lo necesitas
+    }
   }
-});
+);
+
+
+
 
 
 
