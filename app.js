@@ -1,10 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 const http    = require('http');
 const { Server } = require('socket.io');
 const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const { Sequelize } = require('sequelize');
 const path    = require('path');
-const { sequelize } = require('./models');
+
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'mysql',
+  dialectOptions: {
+    
+  }
+});
+
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const store = new SequelizeStore({ db: sequelize });
+
 
 const app    = express();
 const server = http.createServer(app);
@@ -12,14 +23,15 @@ const server = http.createServer(app);
 const io = new Server(server, { transports: ['websocket'] });
 
 app.use(session({
-  secret: 'un-secreto',       
-  store: new SequelizeStore({ db: sequelize }),
+  secret:  process.env.SESSION_SECRET || 'un-secreto',
+  store,
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false }             
 }));
 
-new SequelizeStore({ db: sequelize }).sync();
+store.sync();
+sequelize.sync();
 
 app.set('view engine', 'pug');
 app.use(express.urlencoded({ extended: true }));
@@ -52,8 +64,8 @@ io.on('connection', socket => {
   
 });
 
-// Sincroniza la BD (y sesiones)
-sequelize.sync();
+
+
 
 // Monta  routers
 app.use('/',       require('./routes/index'));
