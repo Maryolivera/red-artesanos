@@ -92,8 +92,7 @@ exports.mostrarMuro = async (req, res) => {
   try {
     const usuarioId = req.session.usuarioId;
 
-    //  Tus álbumes
-    const albums = await Album.findAll({
+const albums = await Album.findAll({
       where: { usuarioId }
     });
 
@@ -106,10 +105,14 @@ exports.mostrarMuro = async (req, res) => {
       order: [['fecha_subida', 'DESC']]
     });
 
+     const usuarioNombre = req.session.usuarioNombre;
+    const usuarioFoto   = req.session.foto;
+
+
     return res.render('muro', {
       title: 'Mi Muro',
-      usuario: req.session.nombre,
-      usuarioFoto: req.session.foto_perfil,
+       usuarioNombre,
+      usuarioFoto,
       albums,
       imagenes
     });

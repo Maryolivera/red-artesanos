@@ -3,23 +3,26 @@ extends layout
 block content
   h1= title
 
-  // Recorro cada álbum
-  each album in albums
-    .album-card
-      h2
-         a(href=`/albums/${album.id}/galeria`)= album.titulo
-      // Si este álbum tiene imágenes
-      if album.imagenes.length
-        ul.galeria
-          each img in album.imagenes
-            li
-              img(src=img.ruta, alt=img.caption, width='100')
-              if img.caption
-                p.caption= img.caption
-      else
-        p Aún no hay imágenes en este álbum.
+   if albums.length
+    each album in albums
+      .album-card.mb-4
+        h2
+          a(href=`/albums/${album.id}/galeria`)= album.titulo
 
-  a.btn(href="/muro") Volver al muro
+        if album.imagenes.length
+          ul.galeria
+            each img in album.imagenes
+              li
+                img(src=img.ruta, alt=img.caption, width="100")
+                if img.caption
+                  p.caption= img.caption
+        else
+          p.text-muted Aún no hay imágenes en este álbum.
+  else
+    p.text-muted No hay álbumes para mostrar.
+
+  a.btn.btn-secondary.mt-4(href="/muro") Volver al muro
+
      
 
 
