@@ -1,11 +1,22 @@
+require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  throw new Error('❌  La variable de entorno DATABASE_URL no está definida');
+}
 
-// Crea una conexión
-const sequelize = new Sequelize('red_social','root','',{
-  host: 'localhost',
-  dialect: 'mariadb',
-  logging: false
+// Crea la instancia de Sequelize
+const sequelize = new Sequelize(connectionString, {
+  dialect: 'mysql',
+  protocol: 'mysql',
+  logging: false,
+  dialectOptions: {
+    
+    
+  }
 });
+
+
 
 const UsuarioModel = require('./Usuario');
 const AlbumModel   = require('./Album');
