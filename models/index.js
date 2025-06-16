@@ -7,13 +7,12 @@ const sequelize = new Sequelize(
   process.env.DB_USER,                      // p.ej. "root"
   process.env.DB_PASS,                      // p.ej. "" o tu password
   {
-    host:     process.env.DB_HOST,          // p.ej. "127.0.0.1"
-    port:     parseInt(process.env.DB_PORT, 10), // p.ej. 3306
+    host:     process.env.DB_HOST,          
+    port:     process.env.DB_PORT, // p.ej. 3306
     dialect:  'mysql',
     logging:  false,
-    dialectOptions: {
-      // ssl: { rejectUnauthorized: false }  // si lo necesitas
-    }
+   
+    
   }
 );
 

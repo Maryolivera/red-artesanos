@@ -12,12 +12,14 @@ const sequelize = new Sequelize(
   process.env.DB_PASS,   // contraseña
   {
     host:     process.env.DB_HOST,        
-    port:     parseInt(process.env.DB_PORT, 10),
+    port:     process.env.DB_PORT,
     dialect:  'mysql',
-    dialectOptions: { /* … */ },
     logging: false
   }
 );
+sequelize.authenticate()
+  .then(() => console.log('✅ Conexión exitosa con AlwaysData'))
+  .catch(err => console.error('❌ Error de conexión:', err));
 
 
 
