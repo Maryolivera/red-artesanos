@@ -38,7 +38,7 @@ exports.crearAlbum = async (req, res) => {
       usuarioId
     });
 
-    res.redirect('/albums');
+    res.redirect('/muro');
   } catch (err) {
     
     
