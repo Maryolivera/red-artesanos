@@ -86,7 +86,7 @@ exports.procesarUpload = async (req, res) => {
     caption: descripcion || null
   });
 
-  res.redirect('/images');
+  res.redirect('/muro');
 };
 
 
