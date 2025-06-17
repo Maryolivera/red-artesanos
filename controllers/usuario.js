@@ -192,6 +192,8 @@ exports.procesarEditarPerfil = async (req, res) => {
       usuario.foto_perfil = req.file.filename;
     }
     await usuario.save();
+    req.session.usuarioNombre = usuario.nombre;
+    req.session.usuarioFoto   = usuario.foto_perfil;
     res.redirect('/perfil');
   } catch (err) {
     res.render('perfil-editar', { usuario, error: 'Error al guardar los cambios.' });

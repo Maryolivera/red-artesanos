@@ -56,7 +56,7 @@ exports.aceptarSolicitud = async (req, res) => {
     return res.json({ ok: true });
   }
   
-  res.redirect('/friends');
+  res.redirect('/muro');
 };
 
 

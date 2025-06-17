@@ -1,4 +1,3 @@
-// controllers/compartir.js
 const { Imagen, Usuario, ImagenCompartida,SolicitudAmistad,Comentario,Album } = require('../models');
 const { Op } = require('sequelize');
 
@@ -14,7 +13,7 @@ exports.mostrarFormulario = async (req, res) => {
       ]
     }
   });
-  // Extrae sólo los IDs del otro extremo de cada relación:
+  
   const amigoIds = relaciones.map(r =>
     r.deId === miId ? r.paraId : r.deId
   );
@@ -51,7 +50,7 @@ exports.mostrarFormulario = async (req, res) => {
       imagenId
     });
 
-    //  Recuperar la imagen sin includes complicados
+    
     const imagen = await Imagen.findByPk(imagenId);
    
     const ownerId = imagen.usuarioId;   
