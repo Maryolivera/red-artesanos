@@ -50,13 +50,13 @@ exports.aceptarSolicitud = async (req, res) => {
       accepted: true,
       fronName
     });
-
+    res.redirect('/muro');
 
     if (req.xhr || req.headers.accept.indexOf('json') > -1) {
     return res.json({ ok: true });
   }
   
-  res.redirect('/muro');
+ 
 };
 
 
