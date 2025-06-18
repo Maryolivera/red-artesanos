@@ -6,7 +6,7 @@ block content
     //- --- CABECERA ---
     .d-flex.align-items-center.justify-content-center.mb-4
       if usuarioFoto
-        img.rounded-circle(src='/uploads/' + usuarioFoto   alt="Foto de perfil", width="60", height="60")
+        img.rounded-circle(src='/'  usuarioFoto   alt="Foto de perfil", width="60", height="60")
       else
         img.rounded-circle(src="/images/default-avatar.png", alt="Avatar por defecto", width="60", height="60")
       h1.ml-3 Bienvenid@, #{usuarioNombre}!
