@@ -1,7 +1,5 @@
-const { DataTypes } = require('sequelize');
-
-module.exports = (sequelize) => {
-  return sequelize.define('Album', {
+module.exports = (sequelize, DataTypes) => {
+  const Album = sequelize.define('Album', {
     titulo: {
       type: DataTypes.STRING,
       allowNull: false
@@ -11,18 +9,16 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: DataTypes.NOW
     },
-     usuarioId: {
+    usuarioId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }
-  },
- {
-    tableName: 'albums',    
-    timestamps: false    
+  }, {
+    tableName: 'albums',
+    timestamps: false
+  });
 
-});
+  return Album;
 };
-Album.hasMany(models.Imagen, {
-  foreignKey: 'albumId',
-  as: 'imagenes'
-});
+
+
