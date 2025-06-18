@@ -50,20 +50,28 @@ exports.mostrarFormulario = async (req, res) => {
       imagenId
     });
 
+console.log('📝 Comentario guardado:', comentario.toJSON());
     
-    const imagen = await Imagen.findByPk(imagenId);
-   
-    const ownerId = imagen.usuarioId;   
-
-    //  Emitir notificación
-    const excerpt = texto.length > 30
-      ? texto.slice(0, 30) + '…'
-      : texto;
-    req.io.to(`user-${ownerId}`).emit('imageComment', {
-      imageId: imagenId,
-      from:    req.session.usuarioNombre,
-      excerpt
+    const compartida = await ImagenCompartida.findOne({
+      where: { imagenId }
     });
+   
+    const ownerId = compartida?.usuarioOrigenId;;   
+   const imagen = await Imagen.findByPk(imagenId);
+if (!imagen) return res.status(404).send('Imagen no encontrada');
+
+const miniatura = imagen.ruta;
+
+
+console.log('📷 Imagen encontrada. Usuario dueño:', ownerId)
+    //  Emitir notificación
+  req.io.to(`user-${ownerId}`).emit('imageComment', {
+  imageId: imagenId,
+  from: req.session.usuarioNombre,
+  texto,
+  miniatura: imagen.ruta 
+});
+
 
     return res.redirect('/muro');
   } catch (err) {

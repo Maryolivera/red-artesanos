@@ -28,11 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
   // cuando llegue un comentario
+const notificacionesPendientes = [];
+
 socket.on('imageComment', data => {
   console.log('[SOCKET] comentario en mi imagen:', data);
-  incrementBadge();
-  showPersistentToast(`${data.from} comentó tu imagen: "${data.texto}"`);
+showPersistentToast(`${data.from} comentó tu imagen: "${data.texto}"`);
 });
+
 
 
   // Función común para incrementar badge
@@ -74,5 +76,5 @@ if (notifIcon) {
   }
   document.addEventListener('keydown', closeOnEnter);
 }
- 
+
 })
