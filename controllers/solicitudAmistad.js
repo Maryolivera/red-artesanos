@@ -55,7 +55,7 @@ exports.aceptarSolicitud = async (req, res) => {
     if (req.xhr || req.headers.accept.indexOf('json') > -1) {
     return res.json({ ok: true });
   }
-  
+    res.redirect('/muro');
  
 };
 
