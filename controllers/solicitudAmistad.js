@@ -20,7 +20,7 @@ exports.aceptarSolicitud = async (req, res) => {
    const fronName = usuarioAcepta.nombre; 
 
   //  Creamos un álbum en el perfil del que envió la solicitud
-  const nuevoAlbum = await Album.create({
+  const nuevoAlbum = await Album.crearAlbum({
     titulo: `${usuarioAcepta.nombre} ${usuarioAcepta.apellido}`,
     usuarioId: solicitud.deId
   });
