@@ -5,13 +5,12 @@ block content
   .container.mt-4
     //- --- CABECERA ---
     .d-flex.align-items-center.justify-content-center.mb-4
-      if usuarioFoto
-        img.rounded-circle(src='/' + usuarioFoto   alt="Foto de perfil", width="60", height="60")
+      if usuario.foto_perfil
+        img.rounded-circle(src=`/uploads/${usuario.foto_perfil}`, alt="Foto de perfil", width="60", height="60")
       else
         img.rounded-circle(src="/images/default-avatar.png", alt="Avatar por defecto", width="60", height="60")
-      h1.ml-3 Bienvenid@, #{usuarioNombre}!
+      h1.ml-3 Bienvenid@, #{usuario.nombre}!
 
-    
     nav.mb-5
       .btn-group(role="group")
         a.btn.btn-primary(href="/albums/new") Crear álbum

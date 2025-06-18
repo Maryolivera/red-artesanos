@@ -108,14 +108,14 @@ const albums = await Album.findAll({
 
      const usuarioNombre = req.session.usuarioNombre;
     const usuarioFoto   = req.session.foto;
+const usuario = await Usuario.findByPk(req.session.usuarioId);
 
 
     return res.render('muro', {
       title: 'Mi Muro',
-       usuarioNombre,
-      usuarioFoto,
+       usuario,
       albums,
-      imagenes
+       imagenes
     });
   } catch (e) {
     console.error(e);
