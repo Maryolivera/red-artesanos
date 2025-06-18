@@ -10,6 +10,7 @@ const album= require('../controllers/album');
 const imagen     = require('../controllers/imagen');
 const compartir = require('../controllers/compartir');
 
+app.use('/', require('./routes/muro'));
 
 router.get('/albums/:id/galeria', album.mostrarGaleria);
 

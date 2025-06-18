@@ -99,7 +99,8 @@ const albums = await Album.findAll({
    
     const imagenes = await Imagen.findAll({
       include: [{
-        association: 'album',              
+        association: 'album',  
+         required: false,            
         where: { usuarioId }
       }],
       order: [['fecha_subida', 'DESC']]
