@@ -22,3 +22,7 @@ module.exports = (sequelize) => {
 
 });
 };
+Album.hasMany(models.Imagen, {
+  foreignKey: 'albumId',
+  as: 'imagenes'
+});

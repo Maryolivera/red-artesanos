@@ -29,3 +29,7 @@ module.exports = (sequelize) => {
     }
 );
 };
+Imagen.belongsTo(models.Album, {
+  foreignKey: 'albumId',
+  as: 'album'  
+});
