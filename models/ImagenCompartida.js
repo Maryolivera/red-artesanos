@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  return sequelize.define('ImagenCompartida', {
+  return sequelize.define('Imagencompartida', {
     imagenId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
       field: 'fecha_comparticion'
     }
   }, {
-    tableName: 'imagenCompartida',
+    tableName: 'imagencompartida',
     timestamps: false
   });
 };

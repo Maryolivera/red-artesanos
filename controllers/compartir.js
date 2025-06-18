@@ -73,34 +73,38 @@ exports.mostrarFormulario = async (req, res) => {
 };
 
 
-
 exports.procesarCompartir = async (req, res) => {
   try {
     const usuarioOrigenId  = req.session.usuarioId;
     const imagenId         = parseInt(req.params.id, 10);
     const usuarioDestinoId = parseInt(req.body.usuarioDestinoId, 10);
 
-    // validación básica
+    // Validación básica
     if (isNaN(usuarioDestinoId)) {
       return res.status(400).send('❌ Debes elegir un usuario destino');
     }
 
-  
-    
+    // Crear el registro de imagen compartida
     await ImagenCompartida.create({
       imagenId,
       usuarioOrigenId,
       usuarioDestinoId
     });
 
+    // Obtener el nombre del usuario origen
+    const usuarioOrigen = await Usuario.findByPk(usuarioOrigenId);
+
+    // Emitir notificación en tiempo real
     if (req.io) {
-      req.io.to(`user-${usuarioDestinoId}`)
-        .emit('imageShared', { imagenId, from: usuarioOrigenId });
+      req.io.to(`user-${usuarioDestinoId}`).emit('nuevaNotificacion', {
+        mensaje: `${usuarioOrigen.nombre} te compartió una imagen.`
+      });
     }
 
     res.redirect('/muro');
   } catch (e) {
-    console.error(e);
+    console.error('❌ Error en procesarCompartir:', e);
     res.status(500).send('❌ Error al compartir la imagen');
   }
 };
+

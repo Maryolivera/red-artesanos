@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Notificaciones
+
+  if notificaciones.length === 0
+    p No tienes notificaciones por el momento.
+  else
+    form(action="/notificaciones/todas", method="post")
+      button(type="submit") Marcar todas como leídas
+
+    ul.notificaciones
+      each n in notificaciones
+        li(class=n.leida ? 'leida' : 'nueva')
+          if n.miniatura
+            img(src='/' + n.miniatura, width='50', height='50', style='object-fit:cover; margin-right:10px; vertical-align:middle')
+          a(href=n.enlace)= n.mensaje
+          small(style='margin-left:10px; font-size: 0.8em') #{n.fecha.toLocaleString()}
+          if !n.leida
+            a(href=`/notificaciones/${n.id}/leida`, style='margin-left: 15px; font-size: 0.8em') [Marcar como leída]
