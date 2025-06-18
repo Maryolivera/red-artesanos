@@ -57,6 +57,7 @@ ImagenCompartida.belongsTo(Usuario, { foreignKey: 'usuarioDestinoId', as: 'desti
 Imagen.hasMany(ImagenCompartida,    { foreignKey: 'imagenId',        as: 'comparticiones' });
 ImagenCompartida.belongsTo(Imagen,  { foreignKey: 'imagenId',        as: 'imagen' });
 
+
 // —– Comentarios
 Usuario.hasMany(Comentario,   { foreignKey: 'autorId',   as: 'comentarios' });
 Comentario.belongsTo(Usuario, { foreignKey: 'autorId',   as: 'autor' });
